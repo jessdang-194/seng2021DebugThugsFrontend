@@ -8,25 +8,59 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { EyeIcon, EyeOffIcon, GithubIcon, MailIcon } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useAuth } from "@/lib/auth-context"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SignupPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [formError, setFormError] = useState("")
+  const router = useRouter()
+  const { signup } = useAuth()
+  const { toast } = useToast()
+
+  // Default values
+  const defaultFirstName = "1"
+  const defaultLastName = "1"
+  const defaultEmail = "1@gmail.com"
+  const defaultPassword = "1"
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const firstName = formData.get("firstName")
-    const lastName = formData.get("lastName")
-    const email = formData.get("email")
-    const password = formData.get("password")
+    setIsLoading(true)
+    setFormError("")
 
-    console.log({ firstName, lastName, email, password })
-    // Here you would typically handle registration
+    const formData = new FormData(event.currentTarget)
+    const firstName = formData.get("firstName") as string
+    const lastName = formData.get("lastName") as string
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    try {
+      const result = await signup({ firstName, lastName, email, password })
+
+      if (result.success) {
+        toast({
+          title: "Account created",
+          description: "Your account has been created successfully!",
+          variant: "default",
+        })
+        router.push("/dashboard")
+      } else {
+        setFormError(result.message)
+      }
+    } catch (error) {
+      setFormError("An unexpected error occurred. Please try again.")
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -64,12 +98,18 @@ export default function SignupPage() {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-4">
+              {formError && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                  {formError}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First name</Label>
                   <Input
                     id="firstName"
                     name="firstName"
+                    defaultValue={defaultFirstName}
                     required
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
@@ -79,6 +119,7 @@ export default function SignupPage() {
                   <Input
                     id="lastName"
                     name="lastName"
+                    defaultValue={defaultLastName}
                     required
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
@@ -90,6 +131,7 @@ export default function SignupPage() {
                   id="email"
                   name="email"
                   type="email"
+                  defaultValue={defaultEmail}
                   placeholder="m@example.com"
                   required
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
@@ -102,6 +144,7 @@ export default function SignupPage() {
                     id="password"
                     name="password"
                     type={isPasswordVisible ? "text" : "password"}
+                    defaultValue={defaultPassword}
                     required
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
@@ -123,6 +166,7 @@ export default function SignupPage() {
                   id="terms"
                   className="h-4 w-4 rounded border-gray-300 text-custom-purple focus:ring-custom-purple"
                   required
+                  defaultChecked
                 />
                 <Label htmlFor="terms" className="text-sm font-normal">
                   I agree to the{" "}
@@ -137,8 +181,12 @@ export default function SignupPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full bg-custom-coral hover:bg-custom-orange text-white">
-                Create account
+              <Button
+                type="submit"
+                className="w-full bg-custom-coral hover:bg-custom-orange text-white"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Create account"}
               </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
