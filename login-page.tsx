@@ -43,7 +43,7 @@ export default function LoginPage() {
           description: "Welcome back!",
           variant: "default",
         })
-        router.push("/dashboard")
+        router.push("/main")
       } else {
         setFormError(result.message)
       }

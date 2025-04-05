@@ -51,7 +51,7 @@ export default function SignupPage() {
           description: "Your account has been created successfully!",
           variant: "default",
         })
-        router.push("/dashboard")
+        router.push("/main")
       } else {
         setFormError(result.message)
       }
