@@ -8,23 +8,53 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { EyeIcon, EyeOffIcon, GithubIcon, MailIcon } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useAuth } from "@/lib/auth-context"
+import { useToast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [formError, setFormError] = useState("")
+  const router = useRouter()
+  const { login } = useAuth()
+  const { toast } = useToast()
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get("email")
-    const password = formData.get("password")
+    setIsLoading(true)
+    setFormError("")
 
-    console.log({ email, password })
-    // Here you would typically handle authentication
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    try {
+      const result = await login(email, password)
+
+      if (result.success) {
+        toast({
+          title: "Login successful",
+          description: "Welcome back!",
+          variant: "default",
+        })
+
+        // Navigate after successful login
+        router.push("/main")
+      } else {
+        setFormError(result.message)
+      }
+    } catch (error) {
+      setFormError("An unexpected error occurred. Please try again.")
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -62,6 +92,11 @@ export default function LoginPage() {
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-4">
+              {formError && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
+                  {formError}
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -70,6 +105,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  autoComplete="email"
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                 />
               </div>
@@ -89,6 +125,7 @@ export default function LoginPage() {
                     name="password"
                     type={isPasswordVisible ? "text" : "password"}
                     required
+                    autoComplete="current-password"
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
                   <Button
@@ -115,8 +152,12 @@ export default function LoginPage() {
               </div>
             </CardContent>
             <CardFooter className="flex flex-col space-y-4">
-              <Button type="submit" className="w-full bg-custom-coral hover:bg-custom-orange text-white">
-                Sign in
+              <Button
+                type="submit"
+                className="w-full bg-custom-coral hover:bg-custom-orange text-white"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
