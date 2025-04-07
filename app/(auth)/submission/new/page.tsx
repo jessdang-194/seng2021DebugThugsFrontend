@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Home } from "lucide-react"
 import Link from "next/link"
-import SubmissionForm from "@/components/submission-form"
+import SubmissionConfirmation from "@/components/submission-confirmation"
 
 export default function NewSubmissionPage() {
   return (
@@ -18,7 +18,7 @@ export default function NewSubmissionPage() {
           </Link>
         </Button>
       </div>
-      <SubmissionForm />
+      <SubmissionConfirmation />
     </div>
   )
 }

@@ -21,12 +21,6 @@ export default function SignupPage() {
   const { signup } = useAuth()
   const { toast } = useToast()
 
-  // Default values
-  const defaultFirstName = "1"
-  const defaultLastName = "1"
-  const defaultEmail = "1@gmail.com"
-  const defaultPassword = "1"
-
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
@@ -109,8 +103,8 @@ export default function SignupPage() {
                   <Input
                     id="firstName"
                     name="firstName"
-                    defaultValue={defaultFirstName}
                     required
+                    autoComplete="given-name"
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
                 </div>
@@ -119,8 +113,8 @@ export default function SignupPage() {
                   <Input
                     id="lastName"
                     name="lastName"
-                    defaultValue={defaultLastName}
                     required
+                    autoComplete="family-name"
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
                 </div>
@@ -131,9 +125,9 @@ export default function SignupPage() {
                   id="email"
                   name="email"
                   type="email"
-                  defaultValue={defaultEmail}
                   placeholder="m@example.com"
                   required
+                  autoComplete="email"
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                 />
               </div>
@@ -144,8 +138,8 @@ export default function SignupPage() {
                     id="password"
                     name="password"
                     type={isPasswordVisible ? "text" : "password"}
-                    defaultValue={defaultPassword}
                     required
+                    autoComplete="new-password"
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
                   <Button

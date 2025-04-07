@@ -54,8 +54,8 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               </SidebarMenuButton>
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/submission/new")}>
-                    <Link href="/submission/new">
+                  <SidebarMenuSubButton asChild isActive={isActive("/submission-form")}>
+                    <Link href="/submission-form">
                       <Upload className="h-4 w-4 mr-2" />
                       New Submission
                     </Link>
@@ -70,8 +70,8 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/main")}>
-                    <Link href="/main">
+                  <SidebarMenuSubButton asChild isActive={isActive("/submission/view")}>
+                    <Link href="/submission/view">
                       <History className="h-4 w-4 mr-2" />
                       All Submissions
                     </Link>
@@ -126,8 +126,8 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/profile/password")}>
-                    <Link href="/profile/password">
+                  <SidebarMenuSubButton asChild isActive={isActive("/forgot-password")}>
+                    <Link href="/forgot-password">
                       <Lock className="h-4 w-4 mr-2" />
                       Change Password
                     </Link>

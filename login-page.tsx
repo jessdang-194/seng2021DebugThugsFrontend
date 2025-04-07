@@ -43,6 +43,8 @@ export default function LoginPage() {
           description: "Welcome back!",
           variant: "default",
         })
+
+        // Navigate after successful login
         router.push("/main")
       } else {
         setFormError(result.message)
@@ -87,9 +89,6 @@ export default function LoginPage() {
             </div>
             <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
             <CardDescription className="text-center">Enter your credentials to sign in to your account</CardDescription>
-            <CardDescription className="text-center text-custom-purple font-medium">
-              Use email: 1@gmail.com and password: 1 to login
-            </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-4">
@@ -106,6 +105,7 @@ export default function LoginPage() {
                   type="email"
                   placeholder="m@example.com"
                   required
+                  autoComplete="email"
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                 />
               </div>
@@ -125,6 +125,7 @@ export default function LoginPage() {
                     name="password"
                     type={isPasswordVisible ? "text" : "password"}
                     required
+                    autoComplete="current-password"
                     className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                   />
                   <Button

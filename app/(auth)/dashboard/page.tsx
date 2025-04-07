@@ -6,11 +6,7 @@ import Link from "next/link"
 export default function DashboardPage() {
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome to your dashboard</p>
-        </div>
+      <div className="mb-6">
         <Button
           variant="outline"
           className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
@@ -22,6 +18,12 @@ export default function DashboardPage() {
           </Link>
         </Button>
       </div>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground">Welcome to your dashboard</p>
+        </div>
+      </div>
 
       {/* Quick Actions */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -31,13 +33,13 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Button className="w-full bg-custom-coral hover:bg-custom-orange text-white" asChild>
-              <Link href="/submission/new">
+              <Link href="/submission-form">
                 <FileText className="mr-2 h-4 w-4" />
                 New Submission
               </Link>
             </Button>
             <Button className="w-full bg-custom-purple hover:bg-custom-brightPurple text-white" asChild>
-              <Link href="/main">
+              <Link href="/submission/view">
                 <Activity className="mr-2 h-4 w-4" />
                 View Submissions
               </Link>

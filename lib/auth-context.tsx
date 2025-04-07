@@ -68,33 +68,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Simulated login function
   const login = async (email: string, password: string) => {
-    // Simulate API call delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      // Simulate API call delay
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    // Get users from localStorage
-    const usersJson = localStorage.getItem("users") || "[]"
-    const users = JSON.parse(usersJson)
+      // Get users from localStorage
+      const usersJson = localStorage.getItem("users") || "[]"
+      const users = JSON.parse(usersJson)
 
-    // Find user with matching email
-    const foundUser = users.find((u: any) => u.email === email)
+      // Find user with matching email
+      const foundUser = users.find((u: any) => u.email === email)
 
-    // Check if user exists and password matches
-    if (!foundUser) {
-      return { success: false, message: "User not found" }
+      // Check if user exists and password matches
+      if (!foundUser) {
+        return { success: false, message: "User not found" }
+      }
+
+      if (foundUser.password !== password) {
+        return { success: false, message: "Invalid password" }
+      }
+
+      // Create user object without password
+      const { password: _, ...userWithoutPassword } = foundUser
+
+      // Set user in state and localStorage
+      setUser(userWithoutPassword)
+      localStorage.setItem("user", JSON.stringify(userWithoutPassword))
+
+      return { success: true, message: "Login successful" }
+    } catch (error) {
+      console.error("Login error:", error)
+      return { success: false, message: "An unexpected error occurred" }
     }
-
-    if (foundUser.password !== password) {
-      return { success: false, message: "Invalid password" }
-    }
-
-    // Create user object without password
-    const { password: _, ...userWithoutPassword } = foundUser
-
-    // Set user in state and localStorage
-    setUser(userWithoutPassword)
-    localStorage.setItem("user", JSON.stringify(userWithoutPassword))
-
-    return { success: true, message: "Login successful" }
   }
 
   // Simulated signup function

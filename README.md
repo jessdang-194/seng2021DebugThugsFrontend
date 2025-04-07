@@ -17,8 +17,12 @@ Minying Wu
 Ryan Yoon
 
 
-# Login process
+## Test Login process
 
 Email: 1@gmail.com
 
 Password: 1
+
+
+## Website structure 
+/ ├── /login ├── /sign │ ├── /main │ │ ├── /new-submission │ │ ├── /edit-submission │ │ └── /all-submissions │ ├── /dashboards │ │ ├── /settings │ │ └── /privacy │ ├── /user-profile │ │ ├── /personal-info │ │ └── /change-password │ ├── /analytics │ └── /help-and-support │ ├── /faq │ └── /contact-us ├── /features ├── /pricing ├── /about └── /contact
