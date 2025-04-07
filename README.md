@@ -25,46 +25,35 @@ Password: 1
 
 
 ### Website structure 
-/
-
+<pre> 
+/(home)
     /login
-    
     /sign
-    
         /main
-        
             /New submission
-            
             /edit submission
-            
             /All submissions
-            
         /Dashboards
-        
             /settings
-            
             /Privacy
-            
         /User Profile
-        
             /personal infor
-            
             /change password
-            
         /Analytics
-        
         /help and support
-        
             /FAQ
-            
             /contant us
 /features
-
 /pricing
-
 /about
-
 /contact
+</pre>
+
+
+
+
+
+
 
 
 
