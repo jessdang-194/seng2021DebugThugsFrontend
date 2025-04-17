@@ -13,10 +13,19 @@ export default function AnalyticsPage() {
       </div>
 
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="submissions">Submissions</TabsTrigger>
-          <TabsTrigger value="activity">Activity</TabsTrigger>
+        <TabsList className="bg-custom-lavender/20">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-custom-purple data-[state=active]:text-white">
+            Overview
+          </TabsTrigger>
+          <TabsTrigger
+            value="submissions"
+            className="data-[state=active]:bg-custom-purple data-[state=active]:text-white"
+          >
+            Submissions
+          </TabsTrigger>
+          <TabsTrigger value="activity" className="data-[state=active]:bg-custom-purple data-[state=active]:text-white">
+            Activity
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -66,7 +75,7 @@ export default function AnalyticsPage() {
                 <CardDescription>Distribution of submission statuses</CardDescription>
               </CardHeader>
               <CardContent className="pl-2">
-                <PieChart />
+                <PieChart colors={["#AD7CF2", "#F8885A", "#C85AED"]} />
               </CardContent>
             </Card>
             <Card>
@@ -75,7 +84,7 @@ export default function AnalyticsPage() {
                 <CardDescription>Number of submissions over time</CardDescription>
               </CardHeader>
               <CardContent>
-                <LineChart />
+                <LineChart color="#AD7CF2" />
               </CardContent>
             </Card>
           </div>
@@ -88,7 +97,7 @@ export default function AnalyticsPage() {
               <CardDescription>Distribution of submissions by category</CardDescription>
             </CardHeader>
             <CardContent>
-              <BarChart />
+              <BarChart colors={["#AD7CF2", "#F8885A", "#C85AED"]} />
             </CardContent>
           </Card>
         </TabsContent>
@@ -100,7 +109,7 @@ export default function AnalyticsPage() {
               <CardDescription>Your activity over the past 30 days</CardDescription>
             </CardHeader>
             <CardContent>
-              <LineChart />
+              <LineChart color="#F8885A" />
             </CardContent>
           </Card>
         </TabsContent>
@@ -108,4 +117,3 @@ export default function AnalyticsPage() {
     </div>
   )
 }
-

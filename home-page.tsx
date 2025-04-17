@@ -17,24 +17,21 @@ export default function HomePage() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-            <span className="text-xl font-bold">ColorFusion</span>
+            <span className="text-xl font-bold">PayPath</span>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+            <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
               Home
             </Link>
-            <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              Features
-            </Link>
-            <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              Pricing
-            </Link>
-            <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+            <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
               About
             </Link>
-            <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+            <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
+              FAQ
+            </Link>
+            <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
               Contact
             </Link>
           </nav>
@@ -61,19 +58,16 @@ export default function HomePage() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t py-4 px-6 bg-white absolute w-full">
             <nav className="flex flex-col space-y-4">
-              <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+              <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
                 Home
               </Link>
-              <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                Features
-              </Link>
-              <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                Pricing
-              </Link>
-              <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+              <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
                 About
               </Link>
-              <Link href="#" className="text-sm font-medium hover:text-custom-purple transition-colors">
+              <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
+                FAQ
+              </Link>
+              <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
                 Contact
               </Link>
               <div className="flex flex-col gap-2 pt-2">
@@ -104,13 +98,14 @@ export default function HomePage() {
             <div className="grid gap-12 lg:grid-cols-2 lg:gap-8 items-center">
               <div className="flex flex-col justify-center space-y-4">
                 <div className="inline-block rounded-lg bg-white/80 px-3 py-1 text-sm shadow-sm backdrop-blur-sm border border-custom-lavender/30 w-fit">
-                  <span className="text-custom-brightPurple font-medium">Introducing ColorFusion</span>
+                  <span className="text-custom-brightPurple font-medium">Introducing PayPath</span>
                 </div>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                  Bring Your Ideas to <span className="text-custom-purple">Life</span> with Color
+                  Streamline Your Payments with <span className="text-custom-purple">PayPath</span>
                 </h1>
                 <p className="max-w-[600px] text-gray-600 md:text-xl">
-                  Create stunning designs with our carefully crafted color palette. Perfect for your next project.
+                  The all-in-one solution for automated tax-compliant invoice management. We help small businesses
+                  eliminate the hassle of tax paperwork.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <Button className="bg-custom-coral hover:bg-custom-orange text-white">
@@ -140,7 +135,7 @@ export default function HomePage() {
                         <Star key={i} className="h-5 w-5 fill-custom-coral text-custom-coral" />
                       ))}
                     </div>
-                    <div className="text-sm font-medium">Loved by 10,000+ designers</div>
+                    <div className="text-sm font-medium">Trusted by 5,000+ businesses</div>
                   </div>
                 </div>
               </div>
@@ -158,26 +153,29 @@ export default function HomePage() {
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Everything You Need</h2>
                 <p className="max-w-[700px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mx-auto">
-                  Our platform provides all the tools you need to create beautiful designs with our custom color
-                  palette.
+                  Our platform provides all the tools you need to streamline your invoice management and ensure tax
+                  compliance.
                 </p>
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
               {[
                 {
-                  title: "Custom Palettes",
-                  description: "Create and save your own color combinations for future projects.",
+                  title: "Invoice Compliance & Validation",
+                  description:
+                    "Automatically validate invoices against tax regulations. Highlights errors and suggests auto-fixes for country-specific tax rules.",
                   color: "bg-custom-purple",
                 },
                 {
-                  title: "Color Harmony",
-                  description: "Automatically generate harmonious color schemes that work together.",
+                  title: "Analytics Dashboard",
+                  description:
+                    "Track sales, overdue payments, and tax filing deadlines. Get clear overviews of monthly sales volume, delayed shipments, and payments due.",
                   color: "bg-custom-brightPurple",
                 },
                 {
-                  title: "Export Options",
-                  description: "Export your colors in various formats for any design software.",
+                  title: "Tax-Ready Reports",
+                  description:
+                    "Generate monthly reports on sales, payments, and shipments. Export tax-ready PDF and CSV reports for accountants or direct filing.",
                   color: "bg-custom-coral",
                 },
               ].map((feature, index) => (
@@ -199,37 +197,98 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Color Showcase Section */}
         <section className="py-20 bg-gray-50">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Our Color Palette</h2>
-              <p className="max-w-[700px] text-gray-600">
-                Explore the beautiful colors that make up our custom palette.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {[
-                { name: "Purple", hex: "#AD7CF2" },
-                { name: "Lavender", hex: "#B4A3E6" },
-                { name: "Bright Purple", hex: "#C85AED" },
-                { name: "Coral", hex: "#F8885A" },
-                { name: "Orange", hex: "#F98858" },
-              ].map((color, index) => (
-                <div key={index} className="flex flex-col">
-                  <div className="h-32 rounded-t-lg shadow-md" style={{ backgroundColor: color.hex }}></div>
-                  <div className="bg-white p-4 rounded-b-lg shadow-md">
-                    <p className="font-medium">{color.name}</p>
-                    <p className="text-sm text-gray-500">{color.hex}</p>
-                  </div>
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
+                  <span className="text-custom-purple font-medium">Pricing</span>
                 </div>
-              ))}
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Simple, Transparent Pricing</h2>
+                <p className="max-w-[700px] text-gray-600 mx-auto">
+                  Choose the plan that works best for your business needs.
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 lg:max-w-3xl lg:mx-auto">
+              <Card className="border-none shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-purple to-custom-brightPurple"></div>
+                <CardHeader className="pt-6">
+                  <CardTitle>Freemium</CardTitle>
+                  <div className="mt-4 flex items-baseline text-gray-900">
+                    <span className="text-4xl font-bold tracking-tight">$0</span>
+                    <span className="ml-1 text-xl font-semibold">/month</span>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ul className="mt-6 space-y-3">
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-purple" />
+                      <span>Up to 10 transactions per month</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-purple" />
+                      <span>Basic invoice validation</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-purple" />
+                      <span>Simple reporting</span>
+                    </li>
+                  </ul>
+                  <Button className="mt-8 w-full bg-custom-purple hover:bg-custom-brightPurple text-white">
+                    Get Started
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card className="border-none shadow-lg relative overflow-hidden">
+                <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-coral to-custom-orange"></div>
+                <CardHeader className="pt-6">
+                  <CardTitle>Premium</CardTitle>
+                  <div className="mt-4 flex items-baseline text-gray-900">
+                    <span className="text-4xl font-bold tracking-tight">$15</span>
+                    <span className="ml-1 text-xl font-semibold">/month</span>
+                    <span className="ml-2 text-sm text-gray-500">per user</span>
+                  </div>
+                  <p className="text-sm text-custom-coral font-medium mt-1">First month only $10</p>
+                </CardHeader>
+                <CardContent>
+                  <ul className="mt-6 space-y-3">
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Unlimited transactions</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Advanced tax compliance validation</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Comprehensive analytics dashboard</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Tax-ready reports for accountants</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Multilingual support (18+ languages)</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <CheckCircle className="h-5 w-5 text-custom-coral" />
+                      <span>Voice order entry</span>
+                    </li>
+                  </ul>
+                  <Button className="mt-8 w-full bg-custom-coral hover:bg-custom-orange text-white">
+                    Start Free Trial
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
 
         {/* Testimonials Section */}
-        <section className="py-20 bg-white">
+        <section className="py-20 bg-gray-50">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="space-y-2">
@@ -238,7 +297,7 @@ export default function HomePage() {
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">What Our Users Say</h2>
                 <p className="max-w-[700px] text-gray-600 mx-auto">
-                  Hear from designers who have transformed their projects with our color palette.
+                  Hear from small business owners who have simplified their tax compliance with PayPath.
                 </p>
               </div>
             </div>
@@ -246,20 +305,21 @@ export default function HomePage() {
               {[
                 {
                   quote:
-                    "This color palette completely transformed my design workflow. The colors work so well together!",
+                    "PayPath has completely transformed how I handle invoices. The automated validation saves me hours every month.",
                   author: "Alex Johnson",
-                  role: "UI Designer",
-                },
-                {
-                  quote: "I've never received so many compliments on my website design. These colors really stand out.",
-                  author: "Sarah Miller",
-                  role: "Web Developer",
+                  role: "Small Business Owner",
                 },
                 {
                   quote:
-                    "As a brand strategist, finding the perfect color palette is crucial. This one exceeded my expectations.",
+                    "I used to dread tax season. With PayPath, I'm always prepared and confident that my invoices are compliant.",
+                  author: "Sarah Miller",
+                  role: "Freelance Consultant",
+                },
+                {
+                  quote:
+                    "The analytics dashboard gives me a clear picture of my business finances. I can spot issues before they become problems.",
                   author: "Michael Chen",
-                  role: "Brand Strategist",
+                  role: "E-commerce Entrepreneur",
                 },
               ].map((testimonial, index) => (
                 <Card key={index} className="border-none shadow-lg">
@@ -286,24 +346,47 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="py-20 bg-white">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
+                  <span className="text-custom-purple font-medium">Our Team</span>
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Meet The Experts</h2>
+                <p className="max-w-[700px] text-gray-600 mx-auto">
+                  The talented people behind PayPath who are passionate about simplifying tax compliance.
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-8 md:grid-cols-5">
+              {[
+                { name: "Sarah Chen", role: "CEO & Co-Founder", bg: "from-custom-purple to-custom-brightPurple" },
+                { name: "Michael Rodriguez", role: "CTO", bg: "from-custom-brightPurple to-custom-coral" },
+                { name: "Aisha Patel", role: "Head of Tax Compliance", bg: "from-custom-coral to-custom-orange" },
+                { name: "David Kim", role: "Lead Developer", bg: "from-custom-orange to-custom-purple" },
+                { name: "Emma Wilson", role: "Customer Success", bg: "from-custom-purple to-custom-coral" },
+              ].map((member, index) => (
+                <div key={index} className="text-center">
+                  <div className={`mb-4 h-32 w-32 mx-auto rounded-full bg-gradient-to-br ${member.bg}`}></div>
+                  <h3 className="text-lg font-bold">{member.name}</h3>
+                  <p className="text-gray-600">{member.role}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
         <section className="py-20 bg-gradient-to-br from-custom-purple to-custom-brightPurple text-white">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-4">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Ready to Transform Your Designs?
+                Ready to Simplify Your Tax Compliance?
               </h2>
               <p className="max-w-[600px] text-white/80 md:text-xl">
-                Join thousands of designers who have elevated their projects with our color palette.
+                Join thousands of small businesses who have eliminated the hassle of tax paperwork with PayPath.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                <Button className="bg-white text-custom-purple hover:bg-gray-100">
-                  <Link href="/signup">Get Started Free</Link>
-                </Button>
-                <Button variant="outline" className="border-white text-white hover:bg-white/20">
-                  View Examples
-                </Button>
-              </div>
             </div>
           </div>
         </section>
@@ -316,9 +399,9 @@ export default function HomePage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-                <span className="text-xl font-bold">ColorFusion</span>
+                <span className="text-xl font-bold">PayPath</span>
               </div>
-              <p className="text-sm text-gray-500">Beautiful color palettes for your next design project.</p>
+              <p className="text-sm text-gray-500">Simplifying tax compliance for small businesses.</p>
             </div>
             <div>
               <h3 className="font-medium mb-4">Product</h3>
@@ -349,7 +432,7 @@ export default function HomePage() {
               <h3 className="font-medium mb-4">Company</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                  <Link href="/about" className="text-gray-500 hover:text-custom-purple">
                     About
                   </Link>
                 </li>
@@ -359,7 +442,7 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                  <Link href="/help/contact" className="text-gray-500 hover:text-custom-purple">
                     Contact
                   </Link>
                 </li>
@@ -397,7 +480,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="mt-12 border-t pt-6 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} ColorFusion. All rights reserved.</p>
+            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} PayPath. All rights reserved.</p>
             <div className="flex space-x-4 mt-4 md:mt-0">
               <Link href="#" className="text-gray-500 hover:text-custom-purple">
                 <span className="sr-only">Twitter</span>
@@ -479,4 +562,3 @@ export default function HomePage() {
     </div>
   )
 }
-

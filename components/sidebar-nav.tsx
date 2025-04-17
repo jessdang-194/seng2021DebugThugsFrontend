@@ -4,7 +4,18 @@ import type React from "react"
 
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
-import { BarChart3, Home, LogOut, Settings, Upload, User, History, Edit, Lock, HelpCircle, Mail } from "lucide-react"
+import {
+  Home,
+  LogOut,
+  User,
+  ShoppingBag,
+  Package,
+  ShoppingCart,
+  Clock,
+  CheckSquare,
+  Receipt,
+  Archive,
+} from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -37,75 +48,107 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
       <Sidebar className={cn("border-r", className)} {...props}>
         <SidebarHeader className="border-b py-4">
           <div className="flex items-center gap-2 px-4">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-            <span className="text-lg font-bold">ColorFusion</span>
+            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-blue to-custom-brightBlue"></div>
+            <span className="text-lg font-bold">PayPath</span>
           </div>
         </SidebarHeader>
 
         <SidebarContent>
           <SidebarMenu>
-            {/* Main - First item (previously Submissions) */}
+            {/* Dashboard */}
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive("/main") || isActive("/submission")}>
-                <Link href="/main">
+              <SidebarMenuButton asChild isActive={isActive("/dashboard")}>
+                <Link href="/dashboard">
                   <Home className="h-5 w-5" />
-                  <span>Main</span>
+                  <span>Dashboard</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            {/* My Items */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive("/items")}>
+                <Link href="/items">
+                  <ShoppingBag className="h-5 w-5" />
+                  <span>My Items</span>
                 </Link>
               </SidebarMenuButton>
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/submission-form")}>
-                    <Link href="/submission-form">
-                      <Upload className="h-4 w-4 mr-2" />
-                      New Submission
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/submission/edit")}>
-                    <Link href="/submission/edit">
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Submission
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/main")}>
-                    <Link href="/main">
-                      <History className="h-4 w-4 mr-2" />
-                      All Submissions
+                  <SidebarMenuSubButton asChild isActive={isActive("/items/create")}>
+                    <Link href="/items/create">
+                      <Package className="h-4 w-4 mr-2" />
+                      Create New Item
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
             </SidebarMenuItem>
 
-            {/* Dashboard - Second item */}
+            {/* Outgoing Orders */}
             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive("/dashboard")}>
-                <Link href="/dashboard">
-                  <BarChart3 className="h-5 w-5" />
-                  <span>Dashboard</span>
+              <SidebarMenuButton asChild isActive={isActive("/outgoing-orders")}>
+                <Link href="/outgoing-orders">
+                  <ShoppingCart className="h-5 w-5" />
+                  <span>Outgoing Orders</span>
                 </Link>
               </SidebarMenuButton>
               <SidebarMenuSub>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/settings")}>
-                    <Link href="/settings">
-                      <Settings className="h-4 w-4 mr-2" />
-                      Settings
+                  <SidebarMenuSubButton asChild isActive={isActive("/outgoing-orders/create")}>
+                    <Link href="/outgoing-orders/create">
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Create New Order
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
                 <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/settings/privacy")}>
-                    <Link href="/settings/privacy">
-                      <Lock className="h-4 w-4 mr-2" />
-                      Privacy
+                  <SidebarMenuSubButton asChild isActive={isActive("/outgoing-orders/past")}>
+                    <Link href="/outgoing-orders/past">
+                      <Archive className="h-4 w-4 mr-2" />
+                      Past Orders
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               </SidebarMenuSub>
+            </SidebarMenuItem>
+
+            {/* Incoming Orders */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive("/incoming-orders")}>
+                <Link href="/incoming-orders">
+                  <Package className="h-5 w-5" />
+                  <span>Incoming Orders</span>
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuSub>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton asChild isActive={isActive("/incoming-orders/pending-payment")}>
+                    <Link href="/incoming-orders/pending-payment">
+                      <Clock className="h-4 w-4 mr-2" />
+                      Pending Payment
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+                <SidebarMenuSubItem>
+                  <SidebarMenuSubButton asChild isActive={isActive("/incoming-orders/processing")}>
+                    <Link href="/incoming-orders/processing">
+                      <CheckSquare className="h-4 w-4 mr-2" />
+                      Processing Orders
+                    </Link>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+
+            {/* Tax Return */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive("/tax-return")}>
+                <Link href="/tax-return">
+                  <Receipt className="h-5 w-5" />
+                  <span>Tax Return</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
 
             {/* User Profile */}
@@ -113,65 +156,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/profile")}>
                 <Link href="/profile">
                   <User className="h-5 w-5" />
-                  <span>User Profile</span>
+                  <span>Profile</span>
                 </Link>
               </SidebarMenuButton>
-              <SidebarMenuSub>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={pathname === "/profile"}>
-                    <Link href="/profile">
-                      <User className="h-4 w-4 mr-2" />
-                      Personal Info
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/profile/password")}>
-                    <Link href="/profile/password">
-                      <Lock className="h-4 w-4 mr-2" />
-                      Change Password
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              </SidebarMenuSub>
-            </SidebarMenuItem>
-
-            {/* Analytics */}
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive("/analytics")}>
-                <Link href="/analytics">
-                  <BarChart3 className="h-5 w-5" />
-                  <span>Analytics</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-
-            {/* Help & Support */}
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={isActive("/help")}>
-                <Link href="/help">
-                  <HelpCircle className="h-5 w-5" />
-                  <span>Help & Support</span>
-                </Link>
-              </SidebarMenuButton>
-              <SidebarMenuSub>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/help/faq")}>
-                    <Link href="/help/faq">
-                      <HelpCircle className="h-4 w-4 mr-2" />
-                      FAQ
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild isActive={isActive("/help/contact")}>
-                    <Link href="/help/contact">
-                      <Mail className="h-4 w-4 mr-2" />
-                      Contact Us
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              </SidebarMenuSub>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
@@ -179,14 +166,14 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
         <SidebarFooter className="border-t py-4">
           <div className="px-4 mb-4">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple flex items-center justify-center text-white">
+              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-custom-blue to-custom-brightBlue flex items-center justify-center text-white">
                 <User className="h-5 w-5" />
               </div>
               <div className="overflow-hidden">
                 <p className="font-medium truncate">
                   {user?.firstName} {user?.lastName}
                 </p>
-                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                <p className="text-xs text-gray-500 truncate">@{user?.username}</p>
               </div>
             </div>
           </div>
@@ -207,4 +194,3 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
     </SidebarProvider>
   )
 }
-

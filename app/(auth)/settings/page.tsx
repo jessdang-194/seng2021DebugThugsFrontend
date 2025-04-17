@@ -52,7 +52,7 @@ export default function SettingsPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="bg-custom-coral hover:bg-custom-orange text-white">Save Preferences</Button>
+            <Button className="bg-custom-purple hover:bg-custom-brightPurple text-white">Save Preferences</Button>
           </CardFooter>
         </Card>
 
@@ -85,4 +85,3 @@ export default function SettingsPage() {
     </div>
   )
 }
-

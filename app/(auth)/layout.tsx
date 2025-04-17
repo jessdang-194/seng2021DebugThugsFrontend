@@ -2,48 +2,90 @@
 
 import type React from "react"
 
+import { SidebarNav } from "@/app/(auth)/sidebar-nav"
+import { Button } from "@/components/ui/button"
 import { useAuth } from "@/lib/auth-context"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
-import { SidebarNav } from "@/components/sidebar-nav"
+import { cn } from "@/lib/utils"
+import { LogOut, Menu, X } from "lucide-react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
-export default function AuthLayout({
-  children,
-}: {
+interface AuthLayoutProps {
   children: React.ReactNode
-}) {
-  const { user, isLoading } = useAuth()
-  const router = useRouter()
+}
 
-  // Redirect if not authenticated
+export default function AuthLayout({ children }: AuthLayoutProps) {
+  const { user, logout, isLoading } = useAuth()
+  const router = useRouter()
+  const pathname = usePathname()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  // Check if user is logged in
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!isLoading && !user && !pathname.includes("/login") && !pathname.includes("/signup")) {
       router.push("/login")
     }
-  }, [user, isLoading, router])
+  }, [user, isLoading, router, pathname])
 
-  // Show loading state or redirect if not authenticated
-  if (isLoading || !user) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-custom-lavender/30 via-white to-white">
-        <div className="text-center">
-          <div className="h-12 w-12 rounded-full border-4 border-t-custom-purple border-r-custom-purple border-b-transparent border-l-transparent animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
+  const handleLogout = () => {
+    logout()
+    router.push("/login")
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!user && !pathname.includes("/login") && !pathname.includes("/signup")) {
+    return null
   }
 
   return (
-    <div className="flex min-h-screen">
-      <SidebarNav />
-      <div className="flex-1 overflow-auto">
-        <div className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-6">
-          <div className="text-xl font-semibold">ColorFusion Dashboard</div>
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+        <Button variant="outline" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+          {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-blue to-custom-brightBlue"></div>
+          <span className="text-lg font-semibold tracking-tight">PayPath</span>
+        </Link>
+        <div className="ml-auto flex items-center gap-2">
+          {user && (
+            <>
+              <span className="text-sm text-muted-foreground hidden md:inline-block">
+                Welcome, {user.firstName} {user.lastName}
+              </span>
+              <Button variant="ghost" size="icon" onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+                <span className="sr-only">Logout</span>
+              </Button>
+            </>
+          )}
         </div>
-        <main className="p-6">{children}</main>
+      </header>
+      <div className="flex flex-1">
+        <aside
+          className={cn(
+            "fixed inset-y-0 left-0 z-40 mt-16 w-64 transform border-r bg-background transition-transform duration-200 ease-in-out md:translate-x-0",
+            isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+          )}
+        >
+          <div className="flex h-[calc(100vh-4rem)] flex-col gap-4 p-4">
+            <SidebarNav />
+          </div>
+        </aside>
+        <main
+          className={cn(
+            "flex-1 p-4 md:p-6 transition-all duration-200 ease-in-out",
+            isSidebarOpen ? "md:ml-64" : "md:ml-64",
+          )}
+        >
+          <div className="mx-auto max-w-5xl">{children}</div>
+        </main>
       </div>
     </div>
   )
 }
-

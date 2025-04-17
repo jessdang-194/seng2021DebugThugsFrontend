@@ -362,4 +362,3 @@ export default function EditSubmissionDetailsPage({ params }: { params: { id: st
     </div>
   )
 }
-

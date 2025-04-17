@@ -43,7 +43,7 @@ export default function ContactPage() {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-            <span className="text-xl font-bold">ColorFusion</span>
+            <span className="text-xl font-bold">PayPath</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -95,8 +95,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-medium">Email Us</h3>
                     <p className="text-sm text-gray-500 mt-1">For general inquiries</p>
-                    <a href="mailto:info@colorfusion.com" className="text-custom-purple hover:underline mt-1 block">
-                      info@colorfusion.com
+                    <a href="mailto:info@paypath.com" className="text-custom-purple hover:underline mt-1 block">
+                      info@paypath.com
                     </a>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export default function ContactPage() {
                     <h3 className="font-medium">Visit Us</h3>
                     <p className="text-sm text-gray-500 mt-1">Our headquarters</p>
                     <address className="not-italic text-sm mt-1">
-                      123 ColorFusion Way
+                      123 PayPath Way
                       <br />
                       San Francisco, CA 94103
                       <br />
@@ -236,9 +236,9 @@ export default function ContactPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-                <span className="text-xl font-bold">ColorFusion</span>
+                <span className="text-xl font-bold">PayPath</span>
               </div>
-              <p className="text-sm text-gray-500">Beautiful color palettes for your next design project.</p>
+              <p className="text-sm text-gray-500">Simplifying tax compliance for small businesses.</p>
             </div>
             <div>
               <h3 className="font-medium mb-4">Product</h3>
@@ -259,39 +259,4 @@ export default function ContactPage() {
               <h3 className="font-medium mb-4">Company</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/about" className="text-gray-500 hover:text-custom-purple">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Careers
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Legal</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Terms
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Privacy
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 border-t pt-6 text-center">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} ColorFusion. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  )
-}
-
+                  <Link\

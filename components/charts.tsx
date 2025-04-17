@@ -126,4 +126,3 @@ export function PieChart() {
 
   return <Pie data={data} options={options} />
 }
-

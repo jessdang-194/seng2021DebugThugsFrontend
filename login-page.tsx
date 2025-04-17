@@ -45,7 +45,7 @@ export default function LoginPage() {
         })
 
         // Navigate after successful login
-        router.push("/main")
+        router.push("/dashboard")
       } else {
         setFormError(result.message)
       }
@@ -87,7 +87,7 @@ export default function LoginPage() {
             <div className="flex justify-center mb-2">
               <div className="h-12 w-12 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center">Welcome back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">Welcome to PayPath</CardTitle>
             <CardDescription className="text-center">Enter your credentials to sign in to your account</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
@@ -155,7 +155,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 className="w-full bg-custom-coral hover:bg-custom-orange text-white"
-                disabled={isLoading}
+                variant="secondary"
               >
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
@@ -201,4 +201,3 @@ export default function LoginPage() {
     </div>
   )
 }
-

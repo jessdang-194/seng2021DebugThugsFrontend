@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { EyeIcon, EyeOffIcon, GithubIcon, MailIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -33,11 +34,13 @@ export default function SignupPage() {
     const formData = new FormData(event.currentTarget)
     const firstName = formData.get("firstName") as string
     const lastName = formData.get("lastName") as string
+    const username = formData.get("username") as string
     const email = formData.get("email") as string
     const password = formData.get("password") as string
+    const billingAddress = formData.get("billingAddress") as string
 
     try {
-      const result = await signup({ firstName, lastName, email, password })
+      const result = await signup({ firstName, lastName, username, email, password, billingAddress })
 
       if (result.success) {
         toast({
@@ -45,7 +48,7 @@ export default function SignupPage() {
           description: "Your account has been created successfully!",
           variant: "default",
         })
-        router.push("/main")
+        router.push("/dashboard")
       } else {
         setFormError(result.message)
       }
@@ -88,7 +91,9 @@ export default function SignupPage() {
               <div className="h-12 w-12 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
             </div>
             <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
-            <CardDescription className="text-center">Enter your information to create your account</CardDescription>
+            <CardDescription className="text-center">
+              Enter your information to create your PayPath account
+            </CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4 pt-4">
@@ -120,6 +125,16 @@ export default function SignupPage() {
                 </div>
               </div>
               <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  required
+                  autoComplete="username"
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -129,6 +144,16 @@ export default function SignupPage() {
                   required
                   autoComplete="email"
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="billingAddress">Billing Address</Label>
+                <Textarea
+                  id="billingAddress"
+                  name="billingAddress"
+                  required
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                  placeholder="Enter your billing address"
                 />
               </div>
               <div className="space-y-2">
@@ -178,7 +203,7 @@ export default function SignupPage() {
               <Button
                 type="submit"
                 className="w-full bg-custom-coral hover:bg-custom-orange text-white"
-                disabled={isLoading}
+                style={{ backgroundColor: "#F8885A", color: "white" }}
               >
                 {isLoading ? "Creating account..." : "Create account"}
               </Button>
@@ -224,4 +249,3 @@ export default function SignupPage() {
     </div>
   )
 }
-

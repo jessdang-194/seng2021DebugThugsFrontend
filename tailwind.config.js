@@ -24,6 +24,9 @@ module.exports = {
           brightPurple: "#C85AED",
           coral: "#F8885A",
           orange: "#F98858",
+          skyBlue: "#E6F7FF",
+          paleGreen: "#E6FFF0",
+          lavenderBlush: "#F5E6FF",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -31,12 +34,12 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#AD7CF2", // Changed to custom purple
+          foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#F8885A", // Changed to custom coral
+          foreground: "#FFFFFF",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -82,4 +85,3 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 }
-

@@ -7,9 +7,11 @@ import { createContext, useContext, useEffect, useState } from "react"
 // Define user type
 export type User = {
   id: string
+  username: string
   firstName: string
   lastName: string
   email: string
+  billingAddress: string
 }
 
 // Define auth context type
@@ -17,7 +19,14 @@ type AuthContextType = {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<{ success: boolean; message: string }>
-  signup: (userData: { firstName: string; lastName: string; email: string; password: string }) => Promise<{
+  signup: (userData: {
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    password: string
+    billingAddress: string
+  }) => Promise<{
     success: boolean
     message: string
   }>
@@ -44,17 +53,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const usersJson = localStorage.getItem("users") || "[]"
     const users = JSON.parse(usersJson)
 
-    // Check if default user exists
+    // Create default user if it doesn't exist
     const defaultUserExists = users.some((u: any) => u.email === "1@gmail.com")
 
     if (!defaultUserExists) {
       // Create default user
       const defaultUser = {
-        id: "default-user-1",
-        firstName: "1",
-        lastName: "1",
+        id: "user_default_1",
+        username: "demo_user",
+        firstName: "Demo",
+        lastName: "User",
         email: "1@gmail.com",
         password: "1",
+        billingAddress: "123 Demo Street, Demo City, 12345",
       }
 
       // Add to users array and save to localStorage
@@ -75,6 +86,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Get users from localStorage
       const usersJson = localStorage.getItem("users") || "[]"
       const users = JSON.parse(usersJson)
+
+      console.log("Attempting login with:", email)
+      console.log("Available users:", users)
 
       // Find user with matching email
       const foundUser = users.find((u: any) => u.email === email)
@@ -103,7 +117,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   // Simulated signup function
-  const signup = async (userData: { firstName: string; lastName: string; email: string; password: string }) => {
+  const signup = async (userData: {
+    firstName: string
+    lastName: string
+    username: string
+    email: string
+    password: string
+    billingAddress: string
+  }) => {
     // Simulate API call delay
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -116,9 +137,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { success: false, message: "Email already in use" }
     }
 
+    // Check if username already exists
+    if (users.some((u: any) => u.username === userData.username)) {
+      return { success: false, message: "Username already in use" }
+    }
+
     // Create new user with ID
     const newUser = {
-      id: Date.now().toString(),
+      id: `user_${Date.now().toString()}`,
       ...userData,
     }
 
@@ -139,7 +165,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Logout function
   const logout = () => {
     setUser(null)
-    localStorage.removeItem("user")
+    localStorage.removeItem("user") // Only remove the current user session, not all users
   }
 
   return <AuthContext.Provider value={{ user, isLoading, login, signup, logout }}>{children}</AuthContext.Provider>
@@ -153,4 +179,3 @@ export function useAuth() {
   }
   return context
 }
-

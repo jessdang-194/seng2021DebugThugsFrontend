@@ -137,6 +137,15 @@ export default function MainPage() {
             Create New Submission
           </Button>
         </Link>
+        <Link href="/submission/view" className="ml-2">
+          <Button
+            variant="outline"
+            className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
+          >
+            <Eye className="mr-2 h-4 w-4" />
+            View All Submissions
+          </Button>
+        </Link>
       </div>
 
       {/* Notifications Section */}
@@ -346,4 +355,3 @@ export default function MainPage() {
     </div>
   )
 }
-
