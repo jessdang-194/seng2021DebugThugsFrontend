@@ -1,7 +1,4 @@
 # seng2021DebugThugsFrontend
-
-# seng2021DebugThugsFrontend
-
 SENG2021DebugThugs2025S1
 
 Team name: H13ADebugThugs
