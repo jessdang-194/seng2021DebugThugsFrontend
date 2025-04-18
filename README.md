@@ -17,6 +17,7 @@ Ryan Yoon
 
 
 ### Test Login process
+Demo user account
 
 Email: 1@gmail.com
 
@@ -28,33 +29,62 @@ Password: 1
 /(home)
     /login
     /sign
-        /main
-            /New submission
-            /edit submission
-            /All submissions
-        /Dashboards
-            /settings
-            /Privacy
-        /User Profile
-            /personal infor
-            /change password
-        /Analytics
-        /help and support
-            /FAQ
-            /contant us
+        /Dashboard
+                /New submission
+                /edit submission
+                /All submissions
+            /MyItems
+            /Outgoing Orders
+            /Incoming Orders
+            /Pending Payments
+            /Processing Orders
+            /Tax Return
+            /Past Order
+            /Analytics
+            /Profile
+                /personal infor
+                /change password
+            /Settings   
 /features
 /pricing
 /about
+/FAQ
 /contact
+/Privacy
 </pre>
 
+## Features
 
+(need to go to the bottom to change)
 
+6 Languages Supported: English, Spanish, French, Chinese, Japanese, Korean
 
+Native Language Display: Each language is shown in its native script for easy recognition
 
+Contact
 
+Q&A
 
+Dashboard
 
+MyItems
 
+Outgoing Orders
 
+Incoming Orders
 
+Pending Payments
+
+Processing Orders
+
+Tax Return
+
+Past Order
+
+Analytics
+
+Profile
+
+About
+
+Contact

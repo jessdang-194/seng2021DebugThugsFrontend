@@ -1,0 +1,427 @@
+// Translations for the 6 supported languages
+export const translations = {
+  en: {
+    "common.home": "Home",
+    "common.about": "About",
+    "common.contact": "Contact",
+    "common.faq": "FAQ",
+    "common.login": "Log in",
+    "common.signup": "Sign up",
+    "common.getStarted": "Get Started",
+    "common.learnMore": "Learn More",
+    "common.welcome": "Welcome back to PayPath",
+
+    "auth.email": "Email",
+    "auth.password": "Password",
+    "auth.confirm_password": "Confirm Password",
+    "auth.forgot_password": "Forgot password?",
+    "auth.remember_me": "Remember me",
+    "auth.signing_in": "Signing in...",
+    "auth.creating_account": "Creating account...",
+    "auth.or_continue_with": "Or continue with",
+    "auth.no_account": "Don't have an account?",
+    "auth.have_account": "Already have an account?",
+    "auth.first_name": "First name",
+    "auth.last_name": "Last name",
+    "auth.username": "Username",
+    "auth.billing_address": "Billing Address",
+    "auth.terms": "I agree to the Terms of Service and Privacy Policy",
+    "auth.create_account_desc": "Enter your information to create your PayPath account",
+
+    "sidebar.dashboard": "Dashboard",
+    "sidebar.items": "My Items",
+    "sidebar.create_item": "Create New Item",
+    "sidebar.outgoing_orders": "Outgoing Orders",
+    "sidebar.create_order": "Create New Order",
+    "sidebar.past_orders": "Past Orders",
+    "sidebar.incoming_orders": "Incoming Orders",
+    "sidebar.pending_payment": "Pending Payment",
+    "sidebar.processing_orders": "Processing Orders",
+    "sidebar.tax_return": "Tax Return",
+    "sidebar.profile": "Profile",
+    "sidebar.logout": "Logout",
+    "sidebar.analytics": "Analytics",
+    "sidebar.settings": "Settings",
+
+    "home.hero.title": "Streamline Your Payments with PayPath",
+    "home.hero.subtitle":
+      "The all-in-one solution for automated tax-compliant invoice management. We help small businesses eliminate the hassle of tax paperwork.",
+
+    "home.features.title": "Everything You Need",
+    "home.features.subtitle":
+      "Our platform provides all the tools you need to streamline your invoice management and ensure tax compliance.",
+
+    "home.pricing.title": "Simple, Transparent Pricing",
+    "home.pricing.subtitle": "Choose the plan that works best for your business needs.",
+    "home.pricing.free": "Freemium",
+    "home.pricing.premium": "Premium",
+    "home.pricing.perMonth": "/month",
+    "home.pricing.perUser": "per user",
+    "home.pricing.firstMonth": "First month only $10",
+
+    "home.testimonials.title": "What Our Users Say",
+    "home.testimonials.subtitle":
+      "Hear from small business owners who have simplified their tax compliance with PayPath.",
+
+    "home.team.title": "Meet The Experts",
+    "home.team.subtitle": "The talented people behind PayPath who are passionate about simplifying tax compliance.",
+
+    "home.cta.title": "Ready to Simplify Your Tax Compliance?",
+    "home.cta.subtitle":
+      "Join thousands of small businesses who have eliminated the hassle of tax paperwork with PayPath.",
+  },
+  es: {
+    "common.home": "Inicio",
+    "common.about": "Acerca de",
+    "common.contact": "Contacto",
+    "common.faq": "Preguntas frecuentes",
+    "common.login": "Iniciar sesión",
+    "common.signup": "Registrarse",
+    "common.getStarted": "Comenzar",
+    "common.learnMore": "Más información",
+    "common.welcome": "Bienvenido de nuevo a PayPath",
+
+    "auth.email": "Correo electrónico",
+    "auth.password": "Contraseña",
+    "auth.confirm_password": "Confirmar contraseña",
+    "auth.forgot_password": "¿Olvidó su contraseña?",
+    "auth.remember_me": "Recordarme",
+    "auth.signing_in": "Iniciando sesión...",
+    "auth.creating_account": "Creando cuenta...",
+    "auth.or_continue_with": "O continuar con",
+    "auth.no_account": "¿No tiene una cuenta?",
+    "auth.have_account": "¿Ya tiene una cuenta?",
+    "auth.first_name": "Nombre",
+    "auth.last_name": "Apellido",
+    "auth.username": "Nombre de usuario",
+    "auth.billing_address": "Dirección de facturación",
+    "auth.terms": "Acepto los Términos de servicio y la Política de privacidad",
+    "auth.create_account_desc": "Ingrese su información para crear su cuenta PayPath",
+
+    "sidebar.dashboard": "Panel de control",
+    "sidebar.items": "Mis artículos",
+    "sidebar.create_item": "Crear nuevo artículo",
+    "sidebar.outgoing_orders": "Pedidos salientes",
+    "sidebar.create_order": "Crear nuevo pedido",
+    "sidebar.past_orders": "Pedidos anteriores",
+    "sidebar.incoming_orders": "Pedidos entrantes",
+    "sidebar.pending_payment": "Pago pendiente",
+    "sidebar.processing_orders": "Procesando pedidos",
+    "sidebar.tax_return": "Declaración de impuestos",
+    "sidebar.profile": "Perfil",
+    "sidebar.logout": "Cerrar sesión",
+    "sidebar.analytics": "Analítica",
+    "sidebar.settings": "Configuración",
+
+    "home.hero.title": "Optimice sus pagos con PayPath",
+    "home.hero.subtitle":
+      "La solución todo en uno para la gestión automatizada de facturas con cumplimiento fiscal. Ayudamos a las pequeñas empresas a eliminar las molestias del papeleo fiscal.",
+
+    "home.features.title": "Todo lo que necesita",
+    "home.features.subtitle":
+      "Nuestra plataforma proporciona todas las herramientas que necesita para optimizar la gestión de facturas y garantizar el cumplimiento fiscal.",
+
+    "home.pricing.title": "Precios simples y transparentes",
+    "home.pricing.subtitle": "Elija el plan que mejor se adapte a las necesidades de su empresa.",
+    "home.pricing.free": "Gratuito",
+    "home.pricing.premium": "Premium",
+    "home.pricing.perMonth": "/mes",
+    "home.pricing.perUser": "por usuario",
+    "home.pricing.firstMonth": "Primer mes solo $10",
+
+    "home.testimonials.title": "Lo que dicen nuestros usuarios",
+    "home.testimonials.subtitle":
+      "Escuche a los propietarios de pequeñas empresas que han simplificado su cumplimiento fiscal con PayPath.",
+
+    "home.team.title": "Conozca a los expertos",
+    "home.team.subtitle":
+      "Las personas talentosas detrás de PayPath que se apasionan por simplificar el cumplimiento fiscal.",
+
+    "home.cta.title": "¿Listo para simplificar su cumplimiento fiscal?",
+    "home.cta.subtitle":
+      "Únase a miles de pequeñas empresas que han eliminado las molestias del papeleo fiscal con PayPath.",
+  },
+  fr: {
+    "common.home": "Accueil",
+    "common.about": "À propos",
+    "common.contact": "Contact",
+    "common.faq": "FAQ",
+    "common.login": "Connexion",
+    "common.signup": "S'inscrire",
+    "common.getStarted": "Commencer",
+    "common.learnMore": "En savoir plus",
+    "common.welcome": "Bienvenue à nouveau sur PayPath",
+
+    "auth.email": "Email",
+    "auth.password": "Mot de passe",
+    "auth.confirm_password": "Confirmer le mot de passe",
+    "auth.forgot_password": "Mot de passe oublié?",
+    "auth.remember_me": "Se souvenir de moi",
+    "auth.signing_in": "Connexion en cours...",
+    "auth.creating_account": "Création du compte...",
+    "auth.or_continue_with": "Ou continuer avec",
+    "auth.no_account": "Vous n'avez pas de compte?",
+    "auth.have_account": "Vous avez déjà un compte?",
+    "auth.first_name": "Prénom",
+    "auth.last_name": "Nom",
+    "auth.username": "Nom d'utilisateur",
+    "auth.billing_address": "Adresse de facturation",
+    "auth.terms": "J'accepte les conditions d'utilisation et la politique de confidentialité",
+    "auth.create_account_desc": "Entrez vos informations pour créer votre compte PayPath",
+
+    "sidebar.dashboard": "Tableau de bord",
+    "sidebar.items": "Mes articles",
+    "sidebar.create_item": "Créer un nouvel article",
+    "sidebar.outgoing_orders": "Commandes sortantes",
+    "sidebar.create_order": "Créer une nouvelle commande",
+    "sidebar.past_orders": "Commandes passées",
+    "sidebar.incoming_orders": "Commandes entrantes",
+    "sidebar.pending_payment": "Paiement en attente",
+    "sidebar.processing_orders": "Traitement des commandes",
+    "sidebar.tax_return": "Déclaration fiscale",
+    "sidebar.profile": "Profil",
+    "sidebar.logout": "Déconnexion",
+    "sidebar.analytics": "Analytique",
+    "sidebar.settings": "Paramètres",
+
+    "home.hero.title": "Simplifiez vos paiements avec PayPath",
+    "home.hero.subtitle":
+      "La solution tout-en-un pour la gestion automatisée des factures conformes aux réglementations fiscales. Nous aidons les petites entreprises à éliminer les tracas liés aux documents fiscaux.",
+
+    "home.features.title": "Tout ce dont vous avez besoin",
+    "home.features.subtitle":
+      "Notre plateforme fournit tous les outils nécessaires pour rationaliser la gestion de vos factures et assurer la conformité fiscale.",
+
+    "home.pricing.title": "Prix simples et transparents",
+    "home.pricing.subtitle": "Choisissez le forfait qui convient le mieux aux besoins de votre entreprise.",
+    "home.pricing.free": "Gratuit",
+    "home.pricing.premium": "Premium",
+    "home.pricing.perMonth": "/mois",
+    "home.pricing.perUser": "par utilisateur",
+    "home.pricing.firstMonth": "Premier mois seulement 10$",
+
+    "home.testimonials.title": "Ce que disent nos utilisateurs",
+    "home.testimonials.subtitle":
+      "Écoutez les propriétaires de petites entreprises qui ont simplifié leur conformité fiscale avec PayPath.",
+
+    "home.team.title": "Rencontrez les experts",
+    "home.team.subtitle":
+      "Les personnes talentueuses derrière PayPath qui sont passionnées par la simplification de la conformité fiscale.",
+
+    "home.cta.title": "Prêt à simplifier votre conformité fiscale?",
+    "home.cta.subtitle":
+      "Rejoignez des milliers de petites entreprises qui ont éliminé les tracas liés aux documents fiscaux avec PayPath.",
+  },
+  zh: {
+    "common.home": "首页",
+    "common.about": "关于我们",
+    "common.contact": "联系我们",
+    "common.faq": "常见问题",
+    "common.login": "登录",
+    "common.signup": "注册",
+    "common.getStarted": "开始使用",
+    "common.learnMore": "了解更多",
+    "common.welcome": "欢迎回到 PayPath",
+
+    "auth.email": "电子邮箱",
+    "auth.password": "密码",
+    "auth.confirm_password": "确认密码",
+    "auth.forgot_password": "忘记密码？",
+    "auth.remember_me": "记住我",
+    "auth.signing_in": "登录中...",
+    "auth.creating_account": "创建账户中...",
+    "auth.or_continue_with": "或继续使用",
+    "auth.no_account": "没有账户？",
+    "auth.have_account": "已有账户？",
+    "auth.first_name": "名",
+    "auth.last_name": "姓",
+    "auth.username": "用户名",
+    "auth.billing_address": "账单地址",
+    "auth.terms": "我同意服务条款和隐私政策",
+    "auth.create_account_desc": "输入您的信息以创建 PayPath 账户",
+
+    "sidebar.dashboard": "仪表板",
+    "sidebar.items": "我的物品",
+    "sidebar.create_item": "创建新物品",
+    "sidebar.outgoing_orders": "发出的订单",
+    "sidebar.create_order": "创建新订单",
+    "sidebar.past_orders": "过往订单",
+    "sidebar.incoming_orders": "收到的订单",
+    "sidebar.pending_payment": "待付款",
+    "sidebar.processing_orders": "处理中的订单",
+    "sidebar.tax_return": "税务申报",
+    "sidebar.profile": "个人资料",
+    "sidebar.logout": "退出登录",
+    "sidebar.analytics": "分析",
+    "sidebar.settings": "设置",
+
+    "home.hero.title": "使用PayPath简化您的支付流程",
+    "home.hero.subtitle": "自动化税务合规发票管理的一体化解决方案。我们帮助小型企业消除税务文书工作的麻烦。",
+
+    "home.features.title": "您需要的一切",
+
+    "home.features.title": "您需要的一切",
+    "home.features.subtitle": "我们的平台提供您简化发票管理和确保税务合规所需的所有工具。",
+
+    "home.pricing.title": "简单透明的价格",
+    "home.pricing.subtitle": "选择最适合您企业需求的计划。",
+    "home.pricing.free": "免费版",
+    "home.pricing.premium": "高级版",
+    "home.pricing.perMonth": "/月",
+    "home.pricing.perUser": "每用户",
+    "home.pricing.firstMonth": "首月仅需$10",
+
+    "home.testimonials.title": "用户评价",
+    "home.testimonials.subtitle": "听听那些通过PayPath简化税务合规的小型企业主的心声。",
+
+    "home.team.title": "认识我们的专家团队",
+    "home.team.subtitle": "PayPath背后热衷于简化税务合规的人才团队。",
+
+    "home.cta.title": "准备好简化您的税务合规了吗？",
+    "home.cta.subtitle": "加入数千家已经通过PayPath消除税务文书工作麻烦的小型企业。",
+  },
+  ja: {
+    "common.home": "ホーム",
+    "common.about": "会社概要",
+    "common.contact": "お問い合わせ",
+    "common.faq": "よくある質問",
+    "common.login": "ログイン",
+    "common.signup": "登録",
+    "common.getStarted": "始める",
+    "common.learnMore": "詳細を見る",
+    "common.welcome": "PayPathへようこそ",
+
+    "auth.email": "メールアドレス",
+    "auth.password": "パスワード",
+    "auth.confirm_password": "パスワード確認",
+    "auth.forgot_password": "パスワードをお忘れですか？",
+    "auth.remember_me": "ログイン情報を保存",
+    "auth.signing_in": "ログイン中...",
+    "auth.creating_account": "アカウント作成中...",
+    "auth.or_continue_with": "または次で続ける",
+    "auth.no_account": "アカウントをお持ちでないですか？",
+    "auth.have_account": "すでにアカウントをお持ちですか？",
+    "auth.first_name": "名",
+    "auth.last_name": "姓",
+    "auth.username": "ユーザー名",
+    "auth.billing_address": "請求先住所",
+    "auth.terms": "利用規約とプライバシーポリシーに同意します",
+    "auth.create_account_desc": "PayPathアカウントを作成するための情報を入力してください",
+
+    "sidebar.dashboard": "ダッシュボード",
+    "sidebar.items": "マイアイテム",
+    "sidebar.create_item": "新しいアイテムを作成",
+    "sidebar.outgoing_orders": "発送注文",
+    "sidebar.create_order": "新しい注文を作成",
+    "sidebar.past_orders": "過去の注文",
+    "sidebar.incoming_orders": "受注",
+    "sidebar.pending_payment": "支払い待ち",
+    "sidebar.processing_orders": "処理中の注文",
+    "sidebar.tax_return": "確定申告",
+    "sidebar.profile": "プロフィール",
+    "sidebar.logout": "ログアウト",
+    "sidebar.analytics": "分析",
+    "sidebar.settings": "設定",
+
+    "home.hero.title": "PayPathで支払いを効率化",
+    "home.hero.subtitle":
+      "税務コンプライアンスに準拠した請求書管理の自動化ソリューション。中小企業の税務書類の手間を排除します。",
+
+    "home.features.title": "必要なものすべて",
+    "home.features.subtitle":
+      "当社のプラットフォームは、請求書管理を効率化し、税務コンプライアンスを確保するために必要なすべてのツールを提供します。",
+
+    "home.pricing.title": "シンプルで透明な価格設定",
+    "home.pricing.subtitle": "ビジネスニーズに最適なプランをお選びください。",
+    "home.pricing.free": "無料版",
+    "home.pricing.premium": "プレミアム",
+    "home.pricing.perMonth": "/月",
+    "home.pricing.perUser": "ユーザーあたり",
+    "home.pricing.firstMonth": "初月は$10のみ",
+
+    "home.testimonials.title": "ユーザーの声",
+    "home.testimonials.subtitle": "PayPathで税務コンプライアンスを簡素化した中小企業オーナーの声をお聞きください。",
+
+    "home.team.title": "専門家チームのご紹介",
+    "home.team.subtitle": "税務コンプライアンスの簡素化に情熱を持つPayPathの才能あるチーム。",
+
+    "home.cta.title": "税務コンプライアンスを簡素化する準備はできていますか？",
+    "home.cta.subtitle": "PayPathで税務書類の手間を排除した何千もの中小企業に参加しましょう。",
+  },
+  ko: {
+    "common.home": "홈",
+    "common.about": "회사 소개",
+    "common.contact": "연락처",
+    "common.faq": "자주 묻는 질문",
+    "common.login": "로그인",
+    "common.signup": "가입하기",
+    "common.getStarted": "시작하기",
+    "common.learnMore": "더 알아보기",
+    "common.welcome": "PayPath에 다시 오신 것을 환영합니다",
+
+    "auth.email": "이메일",
+    "auth.password": "비밀번호",
+    "auth.confirm_password": "비밀번호 확인",
+    "auth.forgot_password": "비밀번호를 잊으셨나요?",
+    "auth.remember_me": "로그인 정보 저장",
+    "auth.signing_in": "로그인 중...",
+    "auth.creating_account": "계정 생성 중...",
+    "auth.or_continue_with": "또는 다음으로 계속",
+    "auth.no_account": "계정이 없으신가요?",
+    "auth.have_account": "이미 계정이 있으신가요?",
+    "auth.first_name": "이름",
+    "auth.last_name": "성",
+    "auth.username": "사용자 이름",
+    "auth.billing_address": "청구지 주소",
+    "auth.terms": "서비스 약관 및 개인정보 보호정책에 동의합니다",
+    "auth.create_account_desc": "PayPath 계정을 만들기 위한 정보를 입력하세요",
+
+    "sidebar.dashboard": "대시보드",
+    "sidebar.items": "내 아이템",
+    "sidebar.create_item": "새 아이템 생성",
+    "sidebar.outgoing_orders": "발신 주문",
+    "sidebar.create_order": "새 주문 생성",
+    "sidebar.past_orders": "지난 주문",
+    "sidebar.incoming_orders": "수신 주문",
+    "sidebar.pending_payment": "결제 대기 중",
+    "sidebar.processing_orders": "처리 중인 주문",
+    "sidebar.tax_return": "세금 신고",
+    "sidebar.profile": "프로필",
+    "sidebar.logout": "로그아웃",
+    "sidebar.analytics": "분석",
+    "sidebar.settings": "설정",
+
+    "home.hero.title": "PayPath로 결제를 간소화하세요",
+    "home.hero.subtitle":
+      "세금 규정을 준수하는 자동화된 인보이스 관리를 위한 올인원 솔루션. 중소기업의 세금 서류 작업 번거로움을 없애드립니다.",
+
+    "home.features.title": "필요한 모든 것",
+    "home.features.subtitle":
+      "당사 플랫폼은 인보이스 관리를 간소화하고 세금 규정 준수를 보장하는 데 필요한 모든 도구를 제공합니다.",
+
+    "home.pricing.title": "간단하고 투명한 가격",
+    "home.pricing.subtitle": "비즈니스 요구에 가장 적합한 플랜을 선택하세요.",
+    "home.pricing.free": "무료",
+    "home.pricing.premium": "프리미엄",
+    "home.pricing.perMonth": "/월",
+    "home.pricing.perUser": "사용자당",
+    "home.pricing.firstMonth": "첫 달 $10만",
+
+    "home.testimonials.title": "사용자 후기",
+    "home.testimonials.subtitle": "PayPath로 세금 규정 준수를 간소화한 중소기업 소유자들의 이야기를 들어보세요.",
+
+    "home.team.title": "전문가 팀 소개",
+    "home.team.subtitle": "세금 규정 준수 간소화에 열정을 가진 PayPath의 재능 있는 팀.",
+
+    "home.cta.title": "세금 규정 준수를 간소화할 준비가 되셨나요?",
+    "home.cta.subtitle": "PayPath로 세금 서류 작업의 번거로움을 없앤 수천 개의 중소기업에 동참하세요.",
+  },
+}
+
+export function getTranslation(language: string, key: string): string {
+  if (!translations[language]) {
+    return translations.en[key] || key
+  }
+
+  return translations[language][key] || translations.en[key] || key
+}
