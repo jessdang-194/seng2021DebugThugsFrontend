@@ -6,6 +6,8 @@ import { CheckCircle, Menu, Star, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
+import { LanguageSelector } from "@/components/language-selector"
+import { Translate } from "@/components/translate"
 
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -23,28 +25,33 @@ export default function HomePage() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
-              Home
+              <Translate text="common.home">Home</Translate>
             </Link>
             <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              About
+              <Translate text="common.about">About</Translate>
             </Link>
             <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              FAQ
+              <Translate text="common.faq">FAQ</Translate>
             </Link>
             <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              Contact
+              <Translate text="common.contact">Contact</Translate>
             </Link>
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
+            <LanguageSelector />
             <Button
               variant="outline"
               className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
             >
-              <Link href="/login">Log in</Link>
+              <Link href="/login">
+                <Translate text="common.login">Log in</Translate>
+              </Link>
             </Button>
             <Button className="bg-custom-coral hover:bg-custom-orange text-white">
-              <Link href="/signup">Sign up</Link>
+              <Link href="/signup">
+                <Translate text="common.signup">Sign up</Translate>
+              </Link>
             </Button>
           </div>
 
@@ -59,29 +66,32 @@ export default function HomePage() {
           <div className="md:hidden border-t py-4 px-6 bg-white absolute w-full">
             <nav className="flex flex-col space-y-4">
               <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
-                Home
+                <Translate text="common.home">Home</Translate>
               </Link>
               <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                About
+                <Translate text="common.about">About</Translate>
               </Link>
               <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                FAQ
+                <Translate text="common.faq">FAQ</Translate>
               </Link>
               <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                Contact
+                <Translate text="common.contact">Contact</Translate>
               </Link>
+              <div className="py-2">
+                <LanguageSelector />
+              </div>
               <div className="flex flex-col gap-2 pt-2">
                 <Button
                   variant="outline"
                   className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white w-full"
                 >
                   <Link href="/login" className="w-full">
-                    Log in
+                    <Translate text="common.login">Log in</Translate>
                   </Link>
                 </Button>
                 <Button className="bg-custom-coral hover:bg-custom-orange text-white w-full">
                   <Link href="/signup" className="w-full">
-                    Sign up
+                    <Translate text="common.signup">Sign up</Translate>
                   </Link>
                 </Button>
               </div>
@@ -101,21 +111,27 @@ export default function HomePage() {
                   <span className="text-custom-brightPurple font-medium">Introducing PayPath</span>
                 </div>
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-                  Streamline Your Payments with <span className="text-custom-purple">PayPath</span>
+                  <Translate text="home.hero.title">
+                    Streamline Your Payments with <span className="text-custom-purple">PayPath</span>
+                  </Translate>
                 </h1>
                 <p className="max-w-[600px] text-gray-600 md:text-xl">
-                  The all-in-one solution for automated tax-compliant invoice management. We help small businesses
-                  eliminate the hassle of tax paperwork.
+                  <Translate text="home.hero.subtitle">
+                    The all-in-one solution for automated tax-compliant invoice management. We help small businesses
+                    eliminate the hassle of tax paperwork.
+                  </Translate>
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <Button className="bg-custom-coral hover:bg-custom-orange text-white">
-                    <Link href="/signup">Get Started</Link>
+                    <Link href="/signup">
+                      <Translate text="common.getStarted">Get Started</Translate>
+                    </Link>
                   </Button>
                   <Button
                     variant="outline"
                     className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
                   >
-                    Learn More
+                    <Translate text="common.learnMore">Learn More</Translate>
                   </Button>
                 </div>
               </div>
@@ -151,10 +167,14 @@ export default function HomePage() {
                 <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
                   <span className="text-custom-purple font-medium">Features</span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Everything You Need</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+                  <Translate text="home.features.title">Everything You Need</Translate>
+                </h2>
                 <p className="max-w-[700px] text-gray-600 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mx-auto">
-                  Our platform provides all the tools you need to streamline your invoice management and ensure tax
-                  compliance.
+                  <Translate text="home.features.subtitle">
+                    Our platform provides all the tools you need to streamline your invoice management and ensure tax
+                    compliance.
+                  </Translate>
                 </p>
               </div>
             </div>
@@ -202,11 +222,17 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
-                  <span className="text-custom-purple font-medium">Pricing</span>
+                  <span className="text-custom-purple font-medium">
+                    <Translate text="home.pricing.title">Pricing</Translate>
+                  </span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Simple, Transparent Pricing</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  <Translate text="home.pricing.title">Simple, Transparent Pricing</Translate>
+                </h2>
                 <p className="max-w-[700px] text-gray-600 mx-auto">
-                  Choose the plan that works best for your business needs.
+                  <Translate text="home.pricing.subtitle">
+                    Choose the plan that works best for your business needs.
+                  </Translate>
                 </p>
               </div>
             </div>
@@ -214,10 +240,14 @@ export default function HomePage() {
               <Card className="border-none shadow-lg relative overflow-hidden">
                 <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-purple to-custom-brightPurple"></div>
                 <CardHeader className="pt-6">
-                  <CardTitle>Freemium</CardTitle>
+                  <CardTitle>
+                    <Translate text="home.pricing.free">Freemium</Translate>
+                  </CardTitle>
                   <div className="mt-4 flex items-baseline text-gray-900">
                     <span className="text-4xl font-bold tracking-tight">$0</span>
-                    <span className="ml-1 text-xl font-semibold">/month</span>
+                    <span className="ml-1 text-xl font-semibold">
+                      <Translate text="home.pricing.perMonth">/month</Translate>
+                    </span>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -236,20 +266,28 @@ export default function HomePage() {
                     </li>
                   </ul>
                   <Button className="mt-8 w-full bg-custom-purple hover:bg-custom-brightPurple text-white">
-                    Get Started
+                    <Translate text="common.getStarted">Get Started</Translate>
                   </Button>
                 </CardContent>
               </Card>
               <Card className="border-none shadow-lg relative overflow-hidden">
                 <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-coral to-custom-orange"></div>
                 <CardHeader className="pt-6">
-                  <CardTitle>Premium</CardTitle>
+                  <CardTitle>
+                    <Translate text="home.pricing.premium">Premium</Translate>
+                  </CardTitle>
                   <div className="mt-4 flex items-baseline text-gray-900">
                     <span className="text-4xl font-bold tracking-tight">$15</span>
-                    <span className="ml-1 text-xl font-semibold">/month</span>
-                    <span className="ml-2 text-sm text-gray-500">per user</span>
+                    <span className="ml-1 text-xl font-semibold">
+                      <Translate text="home.pricing.perMonth">/month</Translate>
+                    </span>
+                    <span className="ml-2 text-sm text-gray-500">
+                      <Translate text="home.pricing.perUser">per user</Translate>
+                    </span>
                   </div>
-                  <p className="text-sm text-custom-coral font-medium mt-1">First month only $10</p>
+                  <p className="text-sm text-custom-coral font-medium mt-1">
+                    <Translate text="home.pricing.firstMonth">First month only $10</Translate>
+                  </p>
                 </CardHeader>
                 <CardContent>
                   <ul className="mt-6 space-y-3">
@@ -271,7 +309,7 @@ export default function HomePage() {
                     </li>
                     <li className="flex gap-2">
                       <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Multilingual support (18+ languages)</span>
+                      <span>Multilingual support (6 languages)</span>
                     </li>
                     <li className="flex gap-2">
                       <CheckCircle className="h-5 w-5 text-custom-coral" />
@@ -279,7 +317,7 @@ export default function HomePage() {
                     </li>
                   </ul>
                   <Button className="mt-8 w-full bg-custom-coral hover:bg-custom-orange text-white">
-                    Start Free Trial
+                    <Translate text="common.getStarted">Start Free Trial</Translate>
                   </Button>
                 </CardContent>
               </Card>
@@ -293,11 +331,17 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
-                  <span className="text-custom-purple font-medium">Testimonials</span>
+                  <span className="text-custom-purple font-medium">
+                    <Translate text="home.testimonials.title">Testimonials</Translate>
+                  </span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">What Our Users Say</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  <Translate text="home.testimonials.title">What Our Users Say</Translate>
+                </h2>
                 <p className="max-w-[700px] text-gray-600 mx-auto">
-                  Hear from small business owners who have simplified their tax compliance with PayPath.
+                  <Translate text="home.testimonials.subtitle">
+                    Hear from small business owners who have simplified their tax compliance with PayPath.
+                  </Translate>
                 </p>
               </div>
             </div>
@@ -351,21 +395,27 @@ export default function HomePage() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
-                  <span className="text-custom-purple font-medium">Our Team</span>
+                  <span className="text-custom-purple font-medium">
+                    <Translate text="home.team.title">Our Team</Translate>
+                  </span>
                 </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Meet The Experts</h2>
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+                  <Translate text="home.team.title">Meet The Experts</Translate>
+                </h2>
                 <p className="max-w-[700px] text-gray-600 mx-auto">
-                  The talented people behind PayPath who are passionate about simplifying tax compliance.
+                  <Translate text="home.team.subtitle">
+                    The talented people behind PayPath who are passionate about simplifying tax compliance.
+                  </Translate>
                 </p>
               </div>
             </div>
             <div className="grid gap-8 md:grid-cols-5">
               {[
-                { name: "Sarah Chen", role: "CEO & Co-Founder", bg: "from-custom-purple to-custom-brightPurple" },
-                { name: "Michael Rodriguez", role: "CTO", bg: "from-custom-brightPurple to-custom-coral" },
-                { name: "Aisha Patel", role: "Head of Tax Compliance", bg: "from-custom-coral to-custom-orange" },
-                { name: "David Kim", role: "Lead Developer", bg: "from-custom-orange to-custom-purple" },
-                { name: "Emma Wilson", role: "Customer Success", bg: "from-custom-purple to-custom-coral" },
+                { name: "Abigail Madayag", role: "Team member", bg: "from-custom-purple to-custom-brightPurple" },
+                { name: "Ryan Yoon", role: "Team member", bg: "from-custom-brightPurple to-custom-coral" },
+                { name: "Jess Dang", role: "Team member", bg: "from-custom-coral to-custom-orange" },
+                { name: "Minying Wu", role: "Team member", bg: "from-custom-orange to-custom-purple" },
+                { name: "Luke Fisher", role: "Team member", bg: "from-custom-purple to-custom-coral" },
               ].map((member, index) => (
                 <div key={index} className="text-center">
                   <div className={`mb-4 h-32 w-32 mx-auto rounded-full bg-gradient-to-br ${member.bg}`}></div>
@@ -382,11 +432,25 @@ export default function HomePage() {
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-4">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Ready to Simplify Your Tax Compliance?
+                <Translate text="home.cta.title">Ready to Simplify Your Tax Compliance?</Translate>
               </h2>
               <p className="max-w-[600px] text-white/80 md:text-xl">
-                Join thousands of small businesses who have eliminated the hassle of tax paperwork with PayPath.
+                <Translate text="home.cta.subtitle">
+                  Join thousands of small businesses who have eliminated the hassle of tax paperwork with PayPath.
+                </Translate>
               </p>
+              <div className="flex flex-col sm:flex-row gap-4 mt-6">
+                <Button className="bg-white text-custom-purple hover:bg-white/90">
+                  <Link href="/signup">
+                    <Translate text="common.signup">Sign Up Now</Translate>
+                  </Link>
+                </Button>
+                <Button variant="outline" className="border-white text-white hover:bg-white/20">
+                  <Link href="/help/contact">
+                    <Translate text="common.contact">Contact Sales</Translate>
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </section>
@@ -395,7 +459,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t bg-white py-12">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
@@ -421,11 +485,6 @@ export default function HomePage() {
                     Tutorials
                   </Link>
                 </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Releases
-                  </Link>
-                </li>
               </ul>
             </div>
             <div>
@@ -433,24 +492,15 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/about" className="text-gray-500 hover:text-custom-purple">
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Careers
+                    <Translate text="common.about">About</Translate>
                   </Link>
                 </li>
                 <li>
                   <Link href="/help/contact" className="text-gray-500 hover:text-custom-purple">
-                    Contact
+                    <Translate text="common.contact">Contact</Translate>
                   </Link>
                 </li>
                 <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Blog
-                  </Link>
-                </li>
               </ul>
             </div>
             <div>
@@ -458,17 +508,7 @@ export default function HomePage() {
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Terms
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
                     Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Cookies
                   </Link>
                 </li>
                 <li>
@@ -477,6 +517,9 @@ export default function HomePage() {
                   </Link>
                 </li>
               </ul>
+            </div>
+            <div>
+              <LanguageSelector variant="footer" />
             </div>
           </div>
           <div className="mt-12 border-t pt-6 flex flex-col md:flex-row justify-between items-center">

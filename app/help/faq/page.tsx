@@ -47,14 +47,14 @@ export default function FAQPage() {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
-            <p className="text-lg text-gray-600">Find answers to the most common questions about ColorFusion</p>
+            <p className="text-lg text-gray-600">Find answers to the most common questions about PayPath</p>
           </div>
 
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger className="text-lg font-medium">What is ColorFusion?</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-medium">What is PayPath?</AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                ColorFusion is a comprehensive submission management platform that allows users to create, track, and
+                PayPath is a comprehensive submission management platform that allows users to create, track, and
                 manage submissions with an intuitive interface. Our platform is designed to simplify the submission
                 process while providing powerful tools for organization and collaboration.
               </AccordionContent>
@@ -85,14 +85,14 @@ export default function FAQPage() {
                 What file formats are supported for uploads?
               </AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                ColorFusion supports a wide range of file formats including PDF, DOC/DOCX, XLS/XLSX, PPT/PPTX, JPG, PNG,
+                PayPath supports a wide range of file formats including PDF, DOC/DOCX, XLS/XLSX, PPT/PPTX, JPG, PNG,
                 and many more. The maximum file size for uploads is 25MB per file. If you need to upload larger files,
                 please contact our support team for assistance.
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="item-5">
-              <AccordionTrigger className="text-lg font-medium">How secure is my data on ColorFusion?</AccordionTrigger>
+              <AccordionTrigger className="text-lg font-medium">How secure is my data on PayPath?</AccordionTrigger>
               <AccordionContent className="text-gray-600">
                 We take security very seriously. All data is encrypted both in transit and at rest using
                 industry-standard encryption protocols. We implement strict access controls, regular security audits,
@@ -105,7 +105,7 @@ export default function FAQPage() {
                 Can I collaborate with others on submissions?
               </AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                Yes, ColorFusion offers collaboration features that allow you to share submissions with team members or
+                Yes, PayPath offers collaboration features that allow you to share submissions with team members or
                 external stakeholders. You can set different permission levels to control who can view, edit, or approve
                 submissions. This makes it easy to work together on complex submission projects.
               </AccordionContent>
@@ -114,7 +114,7 @@ export default function FAQPage() {
             <AccordionItem value="item-7">
               <AccordionTrigger className="text-lg font-medium">What are the pricing plans?</AccordionTrigger>
               <AccordionContent className="text-gray-600">
-                ColorFusion offers several pricing tiers to meet different needs. We have a free tier with basic
+                PayPath offers several pricing tiers to meet different needs. We have a free tier with basic
                 features, as well as Professional, Team, and Enterprise plans with additional capabilities. Visit our
                 Pricing page for detailed information about features and costs for each plan.
               </AccordionContent>
@@ -126,7 +126,7 @@ export default function FAQPage() {
               </AccordionTrigger>
               <AccordionContent className="text-gray-600">
                 We offer multiple support channels. You can access our help documentation, submit a support ticket
-                through your account, email us at support@colorfusion.com, or use the live chat feature during business
+                through your account, email us at support@paypath.com, or use the live chat feature during business
                 hours. Enterprise customers also receive dedicated support representatives.
               </AccordionContent>
             </AccordionItem>
@@ -148,7 +148,7 @@ export default function FAQPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-                <span className="text-xl font-bold">ColorFusion</span>
+                <span className="text-xl font-bold">PayPath</span>
               </div>
               <p className="text-sm text-gray-500">Beautiful color palettes for your next design project.</p>
             </div>
@@ -199,7 +199,7 @@ export default function FAQPage() {
             </div>
           </div>
           <div className="mt-12 border-t pt-6 text-center">
-            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} ColorFusion. All rights reserved.</p>
+            <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} PayPath. All rights reserved.</p>
           </div>
         </div>
       </footer>

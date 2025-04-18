@@ -44,7 +44,7 @@ export default function DashboardPage() {
   }, [user])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6 bg-gradient-to-br from-custom-skyBlue/30 to-custom-lavenderBlush/30 min-h-screen rounded-lg">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
         <p className="text-muted-foreground">Welcome back, {user?.firstName}!</p>

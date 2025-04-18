@@ -10,6 +10,7 @@ import { LogOut, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { LanguageSelector } from "@/components/language-selector"
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -53,6 +54,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <span className="text-lg font-semibold tracking-tight">PayPath</span>
         </Link>
         <div className="ml-auto flex items-center gap-2">
+          <LanguageSelector />
           {user && (
             <>
               <span className="text-sm text-muted-foreground hidden md:inline-block">

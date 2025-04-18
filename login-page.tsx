@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/hooks/use-toast"
+import { LanguageSelector } from "@/components/language-selector"
 
 export default function LoginPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
@@ -60,27 +61,15 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-custom-lavender/30 via-white to-white p-4">
       <div className="w-full max-w-md">
-        <Link
-          href="/"
-          className="flex items-center gap-2 mb-8 text-custom-purple hover:text-custom-brightPurple transition-colors"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-5 w-5"
-          >
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12H5" />
-          </svg>
-          Back to Home
-        </Link>
+        <header className="flex h-14 items-center px-4 lg:px-6 border-b">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+            <span className="text-lg font-semibold tracking-tight">PayPath</span>
+          </Link>
+          <div className="ml-auto flex items-center gap-2">
+            <LanguageSelector />
+          </div>
+        </header>
 
         <Card className="border-none shadow-xl">
           <CardHeader className="space-y-1">

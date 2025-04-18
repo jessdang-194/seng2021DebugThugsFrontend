@@ -154,11 +154,11 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-5 gap-8">
             {[
-              { name: "Sarah Chen", role: "CEO & Co-Founder", bg: "from-custom-purple to-custom-brightPurple" },
-              { name: "Michael Rodriguez", role: "CTO", bg: "from-custom-brightPurple to-custom-coral" },
-              { name: "Aisha Patel", role: "Head of Tax Compliance", bg: "from-custom-coral to-custom-orange" },
-              { name: "David Kim", role: "Lead Developer", bg: "from-custom-orange to-custom-purple" },
-              { name: "Emma Wilson", role: "Customer Success", bg: "from-custom-purple to-custom-coral" },
+              { name: "Abigail Madayag", role: "Team member", bg: "from-custom-purple to-custom-brightPurple" },
+                { name: "Ryan Yoon", role: "Team member", bg: "from-custom-brightPurple to-custom-coral" },
+                { name: "Jess Dang", role: "Team member", bg: "from-custom-coral to-custom-orange" },
+                { name: "Minying Wu", role: "Team member", bg: "from-custom-orange to-custom-purple" },
+                { name: "Luke Fisher", role: "Team member", bg: "from-custom-purple to-custom-coral" },
             ].map((member, index) => (
               <div key={index} className="text-center">
                 <div className={`mb-4 h-32 w-32 mx-auto rounded-full bg-gradient-to-br ${member.bg}`}></div>

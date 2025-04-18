@@ -32,6 +32,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import { Translate } from "@/components/translation"
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -60,7 +61,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/dashboard")}>
                 <Link href="/dashboard">
                   <Home className="h-5 w-5" />
-                  <span>Dashboard</span>
+                  <span>
+                    <Translate text="sidebar.dashboard" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -70,7 +73,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/items")}>
                 <Link href="/items">
                   <ShoppingBag className="h-5 w-5" />
-                  <span>My Items</span>
+                  <span>
+                    <Translate text="sidebar.items" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
               <SidebarMenuSub>
@@ -78,7 +83,7 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <SidebarMenuSubButton asChild isActive={isActive("/items/create")}>
                     <Link href="/items/create">
                       <Package className="h-4 w-4 mr-2" />
-                      Create New Item
+                      <Translate text="sidebar.create_item" />
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -90,7 +95,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/outgoing-orders")}>
                 <Link href="/outgoing-orders">
                   <ShoppingCart className="h-5 w-5" />
-                  <span>Outgoing Orders</span>
+                  <span>
+                    <Translate text="sidebar.outgoing_orders" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
               <SidebarMenuSub>
@@ -98,7 +105,7 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <SidebarMenuSubButton asChild isActive={isActive("/outgoing-orders/create")}>
                     <Link href="/outgoing-orders/create">
                       <ShoppingCart className="h-4 w-4 mr-2" />
-                      Create New Order
+                      <Translate text="sidebar.create_order" />
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -106,7 +113,7 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <SidebarMenuSubButton asChild isActive={isActive("/outgoing-orders/past")}>
                     <Link href="/outgoing-orders/past">
                       <Archive className="h-4 w-4 mr-2" />
-                      Past Orders
+                      <Translate text="sidebar.past_orders" />
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -118,7 +125,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/incoming-orders")}>
                 <Link href="/incoming-orders">
                   <Package className="h-5 w-5" />
-                  <span>Incoming Orders</span>
+                  <span>
+                    <Translate text="sidebar.incoming_orders" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
               <SidebarMenuSub>
@@ -126,7 +135,7 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <SidebarMenuSubButton asChild isActive={isActive("/incoming-orders/pending-payment")}>
                     <Link href="/incoming-orders/pending-payment">
                       <Clock className="h-4 w-4 mr-2" />
-                      Pending Payment
+                      <Translate text="sidebar.pending_payment" />
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -134,7 +143,7 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <SidebarMenuSubButton asChild isActive={isActive("/incoming-orders/processing")}>
                     <Link href="/incoming-orders/processing">
                       <CheckSquare className="h-4 w-4 mr-2" />
-                      Processing Orders
+                      <Translate text="sidebar.processing_orders" />
                     </Link>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
@@ -146,7 +155,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/tax-return")}>
                 <Link href="/tax-return">
                   <Receipt className="h-5 w-5" />
-                  <span>Tax Return</span>
+                  <span>
+                    <Translate text="sidebar.tax_return" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -156,7 +167,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               <SidebarMenuButton asChild isActive={isActive("/profile")}>
                 <Link href="/profile">
                   <User className="h-5 w-5" />
-                  <span>Profile</span>
+                  <span>
+                    <Translate text="sidebar.profile" />
+                  </span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -182,7 +195,9 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
             <SidebarMenuItem>
               <SidebarMenuButton onClick={logout}>
                 <LogOut className="h-5 w-5" />
-                <span>Logout</span>
+                <span>
+                  <Translate text="sidebar.logout" />
+                </span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
