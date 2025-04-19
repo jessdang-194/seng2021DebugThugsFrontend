@@ -71,7 +71,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
       <div className="flex flex-1">
         <aside
           className={cn(
-            "fixed inset-y-0 left-0 z-40 mt-16 w-64 transform border-r bg-background transition-transform duration-200 ease-in-out md:translate-x-0",
+            "fixed inset-y-0 left-0 z-40 mt-16 w-64 transform border-r bg-gradient-to-b from-custom-lavenderBlush/20 to-custom-purple/10 transition-transform duration-200 ease-in-out md:translate-x-0",
             isSidebarOpen ? "translate-x-0" : "-translate-x-full",
           )}
         >

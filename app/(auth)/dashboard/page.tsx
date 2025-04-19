@@ -10,7 +10,7 @@ import {
   getOrdersBySellerId,
   getUnpaidOrdersBySellerId,
 } from "@/models/order"
-import { BarChart3, CreditCard, Package, ShoppingBag, ShoppingCart } from "lucide-react"
+import { Archive, BarChart3, CheckSquare, CreditCard, Package, ShoppingBag, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -120,6 +120,20 @@ export default function DashboardPage() {
                 </Link>
               </Button>
             )}
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <Button variant="outline" className="w-full" asChild>
+                <Link href="/incoming-orders/processing">
+                  <CheckSquare className="mr-2 h-4 w-4" />
+                  Processing Orders
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full" asChild>
+                <Link href="/outgoing-orders/past">
+                  <Archive className="mr-2 h-4 w-4" />
+                  Past Orders
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
 

@@ -5,16 +5,18 @@ import type React from "react"
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
 import {
+  Archive,
+  CheckSquare,
+  Clock,
   Home,
   LogOut,
   User,
   ShoppingBag,
   Package,
   ShoppingCart,
-  Clock,
-  CheckSquare,
   Receipt,
-  Archive,
+  BarChart3,
+  Settings,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -162,6 +164,18 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
               </SidebarMenuButton>
             </SidebarMenuItem>
 
+            {/* Analytics */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive("/analytics")}>
+                <Link href="/analytics">
+                  <BarChart3 className="h-5 w-5" />
+                  <span>
+                    <Translate text="sidebar.analytics" />
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
             {/* User Profile */}
             <SidebarMenuItem>
               <SidebarMenuButton asChild isActive={isActive("/profile")}>
@@ -169,6 +183,18 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
                   <User className="h-5 w-5" />
                   <span>
                     <Translate text="sidebar.profile" />
+                  </span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            {/* Settings */}
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={isActive("/settings")}>
+                <Link href="/settings">
+                  <Settings className="h-5 w-5" />
+                  <span>
+                    <Translate text="sidebar.settings" />
                   </span>
                 </Link>
               </SidebarMenuButton>
