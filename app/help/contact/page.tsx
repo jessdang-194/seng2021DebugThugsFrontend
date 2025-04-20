@@ -259,4 +259,48 @@ export default function ContactPage() {
               <h3 className="font-medium mb-4">Company</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link\
+                  <Link href="/about" className="text-gray-500 hover:text-custom-purple">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                    Blog
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-medium mb-4">Support</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link href="/help/faq" className="text-gray-500 hover:text-custom-purple">
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/help/contact" className="text-gray-500 hover:text-custom-purple">
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                    Documentation
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="mt-8 border-t pt-8 text-center text-sm text-gray-500">
+            <p>© {new Date().getFullYear()} PayPath. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

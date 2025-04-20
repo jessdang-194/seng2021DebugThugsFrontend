@@ -500,7 +500,6 @@ export default function HomePage() {
                     <Translate text="common.contact">Contact</Translate>
                   </Link>
                 </li>
-                <li>
               </ul>
             </div>
             <div>
