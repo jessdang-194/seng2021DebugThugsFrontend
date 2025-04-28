@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -63,7 +64,13 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <header className="flex h-14 items-center px-4 lg:px-6 border-b">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+            <Image
+              src="/images/paypath-logo.png"
+              alt="PayPath Logo"
+              width={40}
+              height={40}
+              className="h-10 w-10 object-contain"
+            />
             <span className="text-lg font-semibold tracking-tight">PayPath</span>
           </Link>
           <div className="ml-auto flex items-center gap-2">
@@ -74,7 +81,13 @@ export default function LoginPage() {
         <Card className="border-none shadow-xl">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-2">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+              <Image
+                src="/images/paypath-logo.png"
+                alt="PayPath Logo"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
             </div>
             <CardTitle className="text-2xl font-bold text-center">Welcome to PayPath</CardTitle>
             <CardDescription className="text-center">Enter your credentials to sign in to your account</CardDescription>

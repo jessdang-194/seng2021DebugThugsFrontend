@@ -2,12 +2,20 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/lib/auth-context"
-import { getOrdersBySellerId } from "@/models/order"
-import { Download, FileText, Search } from "lucide-react"
+import { getCompletedOrdersByBuyerId } from "@/models/order"
+import { Copy, Search, FileText } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -18,22 +26,37 @@ export default function TaxReturnPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString())
+  const [xmlContent, setXmlContent] = useState("")
 
   // Get available years
   const years = Array.from(new Set([...Array(5)].map((_, i) => (new Date().getFullYear() - i).toString())))
 
   useEffect(() => {
-    if (user) {
-      // Load orders from localStorage
-      const sellerOrders = getOrdersBySellerId(user.id)
+    const fetchOrders = async () => {
+      if (user) {
+        try {
+          setIsLoading(true)
+          // Load completed orders for the buyer
+          const buyerCompletedOrders = await getCompletedOrdersByBuyerId(user.id)
 
-      // Filter completed orders
-      const completed = sellerOrders.filter((order) => order.status === "completed")
-
-      setCompletedOrders(completed)
-      setIsLoading(false)
+          // Ensure we have an array
+          setCompletedOrders(Array.isArray(buyerCompletedOrders) ? buyerCompletedOrders : [])
+        } catch (error) {
+          console.error("Error fetching completed orders:", error)
+          toast({
+            title: "Error",
+            description: "Failed to load tax records. Please try again later.",
+            variant: "destructive",
+          })
+          setCompletedOrders([])
+        } finally {
+          setIsLoading(false)
+        }
+      }
     }
-  }, [user])
+
+    fetchOrders()
+  }, [user, toast])
 
   // Filter orders based on search term and year
   const filteredOrders = completedOrders.filter((order) => {
@@ -51,10 +74,69 @@ export default function TaxReturnPage() {
   const totalGST = filteredOrders.reduce((sum, order) => sum + order.gst, 0)
   const totalRevenue = filteredOrders.reduce((sum, order) => sum + order.total, 0)
 
-  const handleDownloadTaxReport = () => {
+  // Generate XML content for all purchase records
+  const generateXmlContent = () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<taxReports year="${selectedYear}">
+  <buyer>
+    <name>${user?.firstName} ${user?.lastName}</name>
+    <username>${user?.username}</username>
+    <email>${user?.email}</email>
+    <billingAddress>${user?.billingAddress}</billingAddress>
+  </buyer>
+  <purchaseRecords>
+${filteredOrders
+  .map(
+    (order) => `    <purchaseRecord>
+      <orderId>${order.id}</orderId>
+      <date>${new Date(order.createdAt).toLocaleDateString()}</date>
+      <seller>
+        <username>${order.sellerUsername}</username>
+        <billingAddress>123 Seller Street, Seller City</billingAddress>
+        <abn>12 345 678 901</abn>
+        <bankDetails>
+          <bsb>123-456</bsb>
+          <accountNumber>12345678</accountNumber>
+        </bankDetails>
+      </seller>
+      <items>
+${
+  order.items && Array.isArray(order.items)
+    ? order.items
+        .map(
+          (item) => `        <item>
+          <name>${item.name}</name>
+          <quantity>${item.quantity}</quantity>
+          <pricePerUnit>${item.pricePerUnit.toFixed(2)}</pricePerUnit>
+          <total>${(item.quantity * item.pricePerUnit).toFixed(2)}</total>
+        </item>`,
+        )
+        .join("\n")
+    : ""
+}
+      </items>
+      <subtotal>${order.subtotal.toFixed(2)}</subtotal>
+      <gst>${order.gst.toFixed(2)}</gst>
+      <total>${order.total.toFixed(2)}</total>
+    </purchaseRecord>`,
+  )
+  .join("\n")}
+  </purchaseRecords>
+  <summary>
+    <totalPurchases>${totalSales.toFixed(2)}</totalPurchases>
+    <totalGST>${totalGST.toFixed(2)}</totalGST>
+    <totalExpenses>${totalRevenue.toFixed(2)}</totalExpenses>
+  </summary>
+</taxReports>`
+
+    setXmlContent(xml)
+  }
+
+  const copyXmlToClipboard = () => {
+    navigator.clipboard.writeText(xmlContent)
     toast({
-      title: "Report Downloaded",
-      description: "Your tax report has been downloaded successfully.",
+      title: "Copied to clipboard",
+      description: "Tax reports XML has been copied to clipboard",
       variant: "default",
     })
   }
@@ -63,23 +145,40 @@ export default function TaxReturnPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Tax Return</h1>
-          <p className="text-muted-foreground">View and download your tax records</p>
+          <h1 className="text-3xl font-bold tracking-tight">Purchase Tax Records</h1>
+          <p className="text-muted-foreground">View and download your purchase records for tax purposes</p>
         </div>
-        <Button
-          className="bg-custom-purple hover:bg-custom-brightPurple text-white"
-          style={{ backgroundColor: "#AD7CF2" }}
-          onClick={handleDownloadTaxReport}
-        >
-          <Download className="mr-2 h-4 w-4" />
-          Download Tax Report
-        </Button>
+        <Dialog onOpenChange={() => generateXmlContent()}>
+          <DialogTrigger asChild>
+            <Button
+              className="bg-custom-purple hover:bg-custom-brightPurple text-white"
+              style={{ backgroundColor: "#AD7CF2" }}
+            >
+              <FileText className="mr-2 h-4 w-4" />
+              Tax Reports XML
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl">
+            <DialogHeader>
+              <DialogTitle>Tax Reports XML for {selectedYear}</DialogTitle>
+              <DialogDescription>Copy this XML data for your tax reporting purposes</DialogDescription>
+            </DialogHeader>
+            <div className="relative">
+              <pre className="bg-gray-100 p-4 rounded-md text-sm overflow-auto max-h-[400px] whitespace-pre-wrap">
+                {xmlContent}
+              </pre>
+              <Button size="sm" variant="outline" className="absolute top-2 right-2" onClick={copyXmlToClipboard}>
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Tax Records for {selectedYear}</CardTitle>
-          <CardDescription>View your completed sales for tax purposes</CardDescription>
+          <CardTitle>Purchase Records for {selectedYear}</CardTitle>
+          <CardDescription>View your completed purchases for tax purposes</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
@@ -117,36 +216,29 @@ export default function TaxReturnPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Order ID</TableHead>
-                      <TableHead>Buyer</TableHead>
+                      <TableHead>Seller</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead>Subtotal</TableHead>
                       <TableHead>GST (10%)</TableHead>
                       <TableHead>Total</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {filteredOrders.map((order) => (
                       <TableRow key={order.id}>
-                        <TableCell className="font-medium">{order.id}</TableCell>
-                        <TableCell>{order.buyerUsername}</TableCell>
+                        <TableCell className="font-medium">
+                          <Link
+                            href={`/outgoing-orders/details/${order.id}`}
+                            className="text-custom-purple hover:underline"
+                          >
+                            {order.id}
+                          </Link>
+                        </TableCell>
+                        <TableCell>{order.sellerUsername}</TableCell>
                         <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                         <TableCell>${order.subtotal.toFixed(2)}</TableCell>
                         <TableCell>${order.gst.toFixed(2)}</TableCell>
                         <TableCell>${order.total.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="hover:text-custom-purple hover:border-custom-purple"
-                            asChild
-                          >
-                            <Link href={`/incoming-orders/${order.id}`}>
-                              <FileText className="h-4 w-4 mr-2" />
-                              View
-                            </Link>
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -160,15 +252,15 @@ export default function TaxReturnPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-custom-skyBlue p-4 rounded-lg">
-                      <p className="text-sm text-blue-600">Total Sales (excl. GST)</p>
+                      <p className="text-sm text-blue-600">Total Purchases (excl. GST)</p>
                       <p className="text-2xl font-bold">${totalSales.toFixed(2)}</p>
                     </div>
                     <div className="bg-custom-paleGreen p-4 rounded-lg">
-                      <p className="text-sm text-green-600">Total GST Collected</p>
+                      <p className="text-sm text-green-600">Total GST Paid</p>
                       <p className="text-2xl font-bold">${totalGST.toFixed(2)}</p>
                     </div>
                     <div className="bg-custom-lavenderBlush p-4 rounded-lg">
-                      <p className="text-sm text-purple-600">Total Revenue (incl. GST)</p>
+                      <p className="text-sm text-purple-600">Total Expenses (incl. GST)</p>
                       <p className="text-2xl font-bold">${totalRevenue.toFixed(2)}</p>
                     </div>
                   </div>
@@ -177,9 +269,9 @@ export default function TaxReturnPage() {
             </>
           ) : (
             <div className="text-center py-8">
-              <p className="text-muted-foreground">No tax records found for {selectedYear}.</p>
+              <p className="text-muted-foreground">No purchase records found for {selectedYear}.</p>
               <p className="text-sm text-muted-foreground mt-2">
-                When orders are completed, they will appear here for tax purposes.
+                When your purchases are completed, they will appear here for tax purposes.
               </p>
             </div>
           )}

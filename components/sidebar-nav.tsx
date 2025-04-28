@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Image from "next/image"
 
 import { useAuth } from "@/lib/auth-context"
 import { cn } from "@/lib/utils"
@@ -51,7 +52,13 @@ export function SidebarNav({ className, ...props }: SidebarNavProps) {
       <Sidebar className={cn("border-r", className)} {...props}>
         <SidebarHeader className="border-b py-4">
           <div className="flex items-center gap-2 px-4">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-blue to-custom-brightBlue"></div>
+            <Image
+              src="/images/paypath-logo.png"
+              alt="PayPath Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
             <span className="text-lg font-bold">PayPath</span>
           </div>
         </SidebarHeader>

@@ -1,3 +1,5 @@
+import { getOrders, saveOrders } from "../lib/redis"
+
 export type OrderStatus = "unpaid" | "pending" | "completed"
 
 export type OrderItem = {
@@ -20,17 +22,18 @@ export type Order = {
   gst: number
   total: number
   createdAt: string
+  completedAt: string | null
 }
 
 // Helper function to create a new order
-export function createOrder(
+export async function createOrder(
   buyerId: string,
   buyerUsername: string,
   sellerId: string,
   sellerUsername: string,
   shippingAddress: string,
   items: OrderItem[],
-): Order {
+): Promise<Order> {
   // Calculate subtotal
   const subtotal = items.reduce((sum, item) => sum + item.pricePerUnit * item.quantity, 0)
 
@@ -40,45 +43,47 @@ export function createOrder(
   // Calculate total
   const total = subtotal + gst
 
-  return {
+  const newOrder = {
     id: `order_${Date.now()}`,
     buyerId,
     buyerUsername,
     sellerId,
     sellerUsername,
     shippingAddress,
-    status: "unpaid",
+    status: "unpaid" as OrderStatus,
     items,
     subtotal,
     gst,
     total,
     createdAt: new Date().toISOString(),
+    completedAt: null,
   }
+
+  await saveOrder(newOrder)
+  return newOrder
 }
 
 // Helper function to get all orders
-export function getAllOrders(): Order[] {
-  const ordersJson = localStorage.getItem("orders") || "[]"
-  return JSON.parse(ordersJson)
+export async function getAllOrders(): Promise<Order[]> {
+  return await getOrders()
 }
 
 // Helper function to get orders by buyer ID
-export function getOrdersByBuyerId(buyerId: string): Order[] {
-  const orders = getAllOrders()
-  return orders.filter((order) => order.buyerId === buyerId)
+export async function getOrdersByBuyerId(buyerId: string): Promise<Order[]> {
+  const orders = await getOrders()
+  return orders.filter((order: Order) => order.buyerId === buyerId)
 }
 
 // Helper function to get orders by seller ID
-export function getOrdersBySellerId(sellerId: string): Order[] {
-  const orders = getAllOrders()
-  return orders.filter((order) => order.sellerId === sellerId)
+export async function getOrdersBySellerId(sellerId: string): Promise<Order[]> {
+  const orders = await getOrders()
+  return orders.filter((order: Order) => order.sellerId === sellerId)
 }
 
 // Helper function to get order by ID
-export function getOrderById(orderId: string): Order | undefined {
+export async function getOrderById(orderId: string): Promise<Order | undefined> {
   try {
-    const ordersJson = localStorage.getItem("orders") || "[]"
-    const orders = JSON.parse(ordersJson)
+    const orders = await getOrders()
     const order = orders.find((order: Order) => order.id === orderId)
 
     if (!order) {
@@ -98,57 +103,98 @@ export function getOrderById(orderId: string): Order | undefined {
 }
 
 // Helper function to update order status
-export function updateOrderStatus(orderId: string, status: OrderStatus): void {
-  const orders = getAllOrders()
-  const orderIndex = orders.findIndex((order) => order.id === orderId)
+export async function updateOrderStatus(orderId: string, status: OrderStatus): Promise<void> {
+  const orders = await getOrders()
+  const orderIndex = orders.findIndex((order: Order) => order.id === orderId)
 
   if (orderIndex >= 0) {
     orders[orderIndex].status = status
-    localStorage.setItem("orders", JSON.stringify(orders))
+
+    // Set completedAt date when order is completed
+    if (status === "completed") {
+      orders[orderIndex].completedAt = new Date().toISOString()
+    }
+
+    await saveOrders(orders)
   }
 }
 
 // Helper function to save an order
-export function saveOrder(order: Order): void {
-  // Get existing orders or initialize empty array
-  const ordersJson = localStorage.getItem("orders") || "[]"
-  const orders = JSON.parse(ordersJson)
+export async function saveOrder(order: Order): Promise<void> {
+  try {
+    // Get existing orders
+    const orders = await getOrders()
 
-  // Check if order already exists
-  const existingOrderIndex = orders.findIndex((o: Order) => o.id === order.id)
+    // Check if order already exists
+    const existingOrderIndex = orders.findIndex((o: Order) => o.id === order.id)
 
-  if (existingOrderIndex >= 0) {
-    orders[existingOrderIndex] = order
-  } else {
-    orders.push(order)
-  }
+    if (existingOrderIndex >= 0) {
+      orders[existingOrderIndex] = order
+    } else {
+      orders.push(order)
+    }
 
-  // Save back to localStorage
-  localStorage.setItem("orders", JSON.stringify(orders))
-
-  // Verify the order was saved correctly
-  const savedOrders = JSON.parse(localStorage.getItem("orders") || "[]")
-  const savedOrder = savedOrders.find((o: Order) => o.id === order.id)
-
-  if (!savedOrder) {
-    console.error("Failed to save order:", order.id)
+    // Save back to Redis
+    await saveOrders(orders)
+  } catch (error) {
+    console.error("Failed to save order:", error)
   }
 }
 
 // Helper function to get completed orders by buyer ID
-export function getCompletedOrdersByBuyerId(buyerId: string): Order[] {
-  const orders = getOrdersByBuyerId(buyerId)
-  return orders.filter((order) => order.status === "completed")
+export async function getCompletedOrdersByBuyerId(buyerId: string): Promise<Order[]> {
+  const orders = await getOrdersByBuyerId(buyerId)
+  return orders.filter((order: Order) => order.status === "completed")
 }
 
 // Helper function to get unpaid orders by seller ID
-export function getUnpaidOrdersBySellerId(sellerId: string): Order[] {
-  const orders = getOrdersBySellerId(sellerId)
-  return orders.filter((order) => order.status === "unpaid")
+export async function getUnpaidOrdersBySellerId(sellerId: string): Promise<Order[]> {
+  const orders = await getOrdersBySellerId(sellerId)
+  return orders.filter((order: Order) => order.status === "unpaid")
 }
 
 // Helper function to get pending orders by seller ID
-export function getPendingOrdersBySellerId(sellerId: string): Order[] {
-  const orders = getOrdersBySellerId(sellerId)
-  return orders.filter((order) => order.status === "pending")
+export async function getPendingOrdersBySellerId(sellerId: string): Promise<Order[]> {
+  const orders = await getOrdersBySellerId(sellerId)
+  return orders.filter((order: Order) => order.status === "pending")
+}
+
+// Helper function to get completed orders by seller ID
+export async function getCompletedOrdersBySellerId(sellerId: string): Promise<Order[]> {
+  const orders = await getOrdersBySellerId(sellerId)
+  return orders.filter((order: Order) => order.status === "completed")
+}
+
+// Helper function to calculate average completion time for a seller
+export async function getAverageCompletionTime(sellerId: string): Promise<number | null> {
+  try {
+    const completedOrders = await getCompletedOrdersBySellerId(sellerId)
+
+    if (!completedOrders || completedOrders.length === 0) {
+      return null
+    }
+
+    let totalDays = 0
+    let validOrderCount = 0
+
+    for (const order of completedOrders) {
+      if (order.completedAt && order.createdAt) {
+        const completedDate = new Date(order.completedAt)
+        const createdDate = new Date(order.createdAt)
+        const diffTime = Math.abs(completedDate.getTime() - createdDate.getTime())
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+        totalDays += diffDays
+        validOrderCount++
+      }
+    }
+
+    if (validOrderCount === 0) {
+      return null
+    }
+
+    return Number.parseFloat((totalDays / validOrderCount).toFixed(1))
+  } catch (error) {
+    console.error("Error calculating average completion time:", error)
+    return null
+  }
 }

@@ -1,17 +1,11 @@
 "use client"
 
 import { TableCell } from "@/components/ui/table"
-
 import { TableBody } from "@/components/ui/table"
-
 import { TableHead } from "@/components/ui/table"
-
 import { TableRow } from "@/components/ui/table"
-
 import { TableHeader } from "@/components/ui/table"
-
 import { Table } from "@/components/ui/table"
-
 import type React from "react"
 
 import { Button } from "@/components/ui/button"
@@ -22,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/lib/auth-context"
 import { getAllItems, getItemById } from "@/models/item"
-import { createOrder, type OrderItem, saveOrder } from "@/models/order"
+import { createOrder, type OrderItem } from "@/models/order"
 import { ArrowLeft, Minus, Plus, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -45,31 +39,73 @@ export default function CreateOrderPage() {
   })
 
   useEffect(() => {
-    // Get all items
-    const allItems = getAllItems()
+    // Create an async function inside useEffect
+    const fetchItems = async () => {
+      try {
+        // Get all items
+        const allItems = await getAllItems()
 
-    // Extract unique sellers
-    const uniqueSellers = Array.from(
-      new Map(allItems.map((item) => [item.sellerId, { id: item.sellerId, username: item.sellerUsername }])).values(),
-    )
+        if (!Array.isArray(allItems)) {
+          console.error("getAllItems did not return an array:", allItems)
+          toast({
+            title: "Error",
+            description: "Failed to load items. Please try again later.",
+            variant: "destructive",
+          })
+          return
+        }
 
-    // Filter out current user
-    const filteredSellers = uniqueSellers.filter((seller) => seller.id !== user?.id)
+        // Extract unique sellers
+        const uniqueSellers = Array.from(
+          new Map(
+            allItems.map((item) => [item.sellerId, { id: item.sellerId, username: item.sellerUsername }]),
+          ).values(),
+        )
 
-    setSellers(filteredSellers)
-  }, [user])
+        // Filter out current user
+        const filteredSellers = uniqueSellers.filter((seller) => seller.id !== user?.id)
+
+        setSellers(filteredSellers)
+      } catch (error) {
+        console.error("Error fetching items:", error)
+        toast({
+          title: "Error",
+          description: "Failed to load items. Please try again later.",
+          variant: "destructive",
+        })
+      }
+    }
+
+    fetchItems()
+  }, [user, toast])
 
   // When seller changes, update available items
   useEffect(() => {
     if (formData.sellerId) {
-      // Get all items
-      const allItems = getAllItems()
+      // Create an async function inside useEffect
+      const fetchSellerItems = async () => {
+        try {
+          // Get all items
+          const allItems = await getAllItems()
 
-      // Filter items by seller
-      const items = allItems.filter((item) => item.sellerId === formData.sellerId)
+          if (!Array.isArray(allItems)) {
+            console.error("getAllItems did not return an array:", allItems)
+            setSellerItems([])
+            return
+          }
 
-      setSellerItems(items)
-      setSelectedItems([])
+          // Filter items by seller
+          const items = allItems.filter((item) => item.sellerId === formData.sellerId)
+
+          setSellerItems(items)
+          setSelectedItems([])
+        } catch (error) {
+          console.error("Error fetching seller items:", error)
+          setSellerItems([])
+        }
+      }
+
+      fetchSellerItems()
     }
   }, [formData.sellerId])
 
@@ -82,7 +118,7 @@ export default function CreateOrderPage() {
     setFormData((prev) => ({ ...prev, sellerId: value }))
   }
 
-  const handleAddItem = (itemId: string) => {
+  const handleAddItem = async (itemId: string) => {
     // Check if item already in cart
     const existingItem = selectedItems.find((item) => item.itemId === itemId)
 
@@ -92,19 +128,28 @@ export default function CreateOrderPage() {
         selectedItems.map((item) => (item.itemId === itemId ? { ...item, quantity: item.quantity + 1 } : item)),
       )
     } else {
-      // Add new item
-      const item = getItemById(itemId)
+      try {
+        // Add new item
+        const item = await getItemById(itemId)
 
-      if (item) {
-        setSelectedItems([
-          ...selectedItems,
-          {
-            itemId: item.id,
-            name: item.name,
-            quantity: 1,
-            pricePerUnit: item.estimatedPrice,
-          },
-        ])
+        if (item) {
+          setSelectedItems([
+            ...selectedItems,
+            {
+              itemId: item.id,
+              name: item.name,
+              quantity: 1,
+              pricePerUnit: item.estimatedPrice,
+            },
+          ])
+        }
+      } catch (error) {
+        console.error("Error adding item:", error)
+        toast({
+          title: "Error",
+          description: "Failed to add item. Please try again.",
+          variant: "destructive",
+        })
       }
     }
   }
@@ -135,7 +180,7 @@ export default function CreateOrderPage() {
     return calculateSubtotal() + calculateGST()
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!user) {
@@ -168,7 +213,7 @@ export default function CreateOrderPage() {
       }
 
       // Create new order
-      const newOrder = createOrder(
+      const newOrder = await createOrder(
         user.id,
         user.username,
         seller.id,
@@ -177,11 +222,8 @@ export default function CreateOrderPage() {
         selectedItems,
       )
 
-      // Save order to localStorage
-      saveOrder(newOrder)
-
       // Verify the order was saved correctly
-      const savedOrder = getOrderById(newOrder.id)
+      const savedOrder = await getOrderById(newOrder.id)
       if (!savedOrder) {
         throw new Error("Order was not saved correctly")
       }
@@ -193,8 +235,8 @@ export default function CreateOrderPage() {
         variant: "default",
       })
 
-      // Redirect to the specific order page
-      router.push(`/outgoing-orders/${newOrder.id}`)
+      // Redirect to the specific order page - update to new path
+      router.push(`/outgoing-orders/details/${newOrder.id}`)
     } catch (error) {
       console.error("Order creation error:", error)
       toast({

@@ -2,12 +2,13 @@
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, Menu, Star, X } from "lucide-react"
+import { CheckCircle, Globe, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import { LanguageSelector } from "@/components/language-selector"
 import { Translate } from "@/components/translate"
+import { LanguageSelector } from "@/components/language-selector"
+import { NavHeader } from "@/components/nav-header"
 
 export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -15,90 +16,7 @@ export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-white">
-        <div className="container flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-            <span className="text-xl font-bold">PayPath</span>
-          </div>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
-              <Translate text="common.home">Home</Translate>
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              <Translate text="common.about">About</Translate>
-            </Link>
-            <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              <Translate text="common.faq">FAQ</Translate>
-            </Link>
-            <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
-              <Translate text="common.contact">Contact</Translate>
-            </Link>
-          </nav>
-
-          <div className="hidden md:flex items-center gap-4">
-            <LanguageSelector />
-            <Button
-              variant="outline"
-              className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
-            >
-              <Link href="/login">
-                <Translate text="common.login">Log in</Translate>
-              </Link>
-            </Button>
-            <Button className="bg-custom-coral hover:bg-custom-orange text-white">
-              <Link href="/signup">
-                <Translate text="common.signup">Sign up</Translate>
-              </Link>
-            </Button>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t py-4 px-6 bg-white absolute w-full">
-            <nav className="flex flex-col space-y-4">
-              <Link href="/" className="text-sm font-medium text-custom-purple transition-colors">
-                <Translate text="common.home">Home</Translate>
-              </Link>
-              <Link href="/about" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                <Translate text="common.about">About</Translate>
-              </Link>
-              <Link href="/help/faq" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                <Translate text="common.faq">FAQ</Translate>
-              </Link>
-              <Link href="/help/contact" className="text-sm font-medium hover:text-custom-purple transition-colors">
-                <Translate text="common.contact">Contact</Translate>
-              </Link>
-              <div className="py-2">
-                <LanguageSelector />
-              </div>
-              <div className="flex flex-col gap-2 pt-2">
-                <Button
-                  variant="outline"
-                  className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white w-full"
-                >
-                  <Link href="/login" className="w-full">
-                    <Translate text="common.login">Log in</Translate>
-                  </Link>
-                </Button>
-                <Button className="bg-custom-coral hover:bg-custom-orange text-white w-full">
-                  <Link href="/signup" className="w-full">
-                    <Translate text="common.signup">Sign up</Translate>
-                  </Link>
-                </Button>
-              </div>
-            </nav>
-          </div>
-        )}
-      </header>
+      <NavHeader />
 
       <main className="flex-1">
         {/* Hero Section */}
@@ -131,15 +49,17 @@ export default function HomePage() {
                     variant="outline"
                     className="border-custom-purple text-custom-purple hover:bg-custom-purple hover:text-white"
                   >
-                    <Translate text="common.learnMore">Learn More</Translate>
+                    <Link href="/about">
+                      <Translate text="common.learnMore">Learn More</Translate>
+                    </Link>
                   </Button>
                 </div>
               </div>
               <div className="relative h-[350px] lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
-                <div className="absolute inset-0 bg-gradient-to-br from-custom-purple via-custom-brightPurple to-custom-coral opacity-90 z-10"></div>
+                <div className="absolute inset-0 z-10"></div>
                 <Image
-                  src="/placeholder.svg?height=500&width=600"
-                  alt="Colorful abstract design"
+                  src="/images/happy-people-boxes.png"
+                  alt="Happy people handling packages and boxes"
                   fill
                   className="object-cover"
                 />
@@ -178,147 +98,96 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3">
-              {[
-                {
-                  title: "Invoice Compliance & Validation",
-                  description:
-                    "Automatically validate invoices against tax regulations. Highlights errors and suggests auto-fixes for country-specific tax rules.",
-                  color: "bg-custom-purple",
-                },
-                {
-                  title: "Analytics Dashboard",
-                  description:
-                    "Track sales, overdue payments, and tax filing deadlines. Get clear overviews of monthly sales volume, delayed shipments, and payments due.",
-                  color: "bg-custom-brightPurple",
-                },
-                {
-                  title: "Tax-Ready Reports",
-                  description:
-                    "Generate monthly reports on sales, payments, and shipments. Export tax-ready PDF and CSV reports for accountants or direct filing.",
-                  color: "bg-custom-coral",
-                },
-              ].map((feature, index) => (
-                <Card key={index} className="border-none shadow-lg hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <div
-                      className={`w-12 h-12 rounded-lg ${feature.color} flex items-center justify-center text-white mb-4`}
-                    >
-                      <CheckCircle className="h-6 w-6" />
-                    </div>
-                    <CardTitle>{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base">{feature.description}</CardDescription>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="py-20 bg-gray-50">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center mb-12">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-custom-lavender/20 px-3 py-1 text-sm">
-                  <span className="text-custom-purple font-medium">
-                    <Translate text="home.pricing.title">Pricing</Translate>
-                  </span>
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-                  <Translate text="home.pricing.title">Simple, Transparent Pricing</Translate>
-                </h2>
-                <p className="max-w-[700px] text-gray-600 mx-auto">
-                  <Translate text="home.pricing.subtitle">
-                    Choose the plan that works best for your business needs.
-                  </Translate>
-                </p>
-              </div>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:max-w-3xl lg:mx-auto">
-              <Card className="border-none shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-purple to-custom-brightPurple"></div>
-                <CardHeader className="pt-6">
-                  <CardTitle>
-                    <Translate text="home.pricing.free">Freemium</Translate>
-                  </CardTitle>
-                  <div className="mt-4 flex items-baseline text-gray-900">
-                    <span className="text-4xl font-bold tracking-tight">$0</span>
-                    <span className="ml-1 text-xl font-semibold">
-                      <Translate text="home.pricing.perMonth">/month</Translate>
-                    </span>
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 xl:grid-cols-4">
+              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-custom-purple flex items-center justify-center text-white mb-4">
+                    <Globe className="h-6 w-6" />
                   </div>
+                  <CardTitle>
+                    <h3 className="mb-2 text-xl font-semibold">
+                      <Translate text="home.features.multilanguage">Support Multiple Languages</Translate>
+                    </h3>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-purple" />
-                      <span>Up to 10 transactions per month</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-purple" />
-                      <span>Basic invoice validation</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-purple" />
-                      <span>Simple reporting</span>
-                    </li>
-                  </ul>
-                  <Button className="mt-8 w-full bg-custom-purple hover:bg-custom-brightPurple text-white">
-                    <Translate text="common.getStarted">Get Started</Translate>
-                  </Button>
+                  <CardDescription className="text-base">
+                    <p className="text-muted-foreground">
+                      <Translate text="home.features.multilanguage.desc">
+                        Our platform supports 6 languages including English, Spanish, French, Chinese, Japanese, and
+                        Korean to serve a global customer base.
+                      </Translate>
+                    </p>
+                  </CardDescription>
                 </CardContent>
               </Card>
-              <Card className="border-none shadow-lg relative overflow-hidden">
-                <div className="absolute inset-0 h-1 bg-gradient-to-r from-custom-coral to-custom-orange"></div>
-                <CardHeader className="pt-6">
-                  <CardTitle>
-                    <Translate text="home.pricing.premium">Premium</Translate>
-                  </CardTitle>
-                  <div className="mt-4 flex items-baseline text-gray-900">
-                    <span className="text-4xl font-bold tracking-tight">$15</span>
-                    <span className="ml-1 text-xl font-semibold">
-                      <Translate text="home.pricing.perMonth">/month</Translate>
-                    </span>
-                    <span className="ml-2 text-sm text-gray-500">
-                      <Translate text="home.pricing.perUser">per user</Translate>
-                    </span>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-custom-brightPurple flex items-center justify-center text-white mb-4">
+                    <CheckCircle className="h-6 w-6" />
                   </div>
-                  <p className="text-sm text-custom-coral font-medium mt-1">
-                    <Translate text="home.pricing.firstMonth">First month only $10</Translate>
-                  </p>
+                  <CardTitle>
+                    <h3 className="mb-2 text-xl font-semibold">
+                      <Translate text="home.features.invoice">Invoice Compliance & Validation</Translate>
+                    </h3>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="mt-6 space-y-3">
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Unlimited transactions</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Advanced tax compliance validation</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Comprehensive analytics dashboard</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Tax-ready reports for accountants</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Multilingual support (6 languages)</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <CheckCircle className="h-5 w-5 text-custom-coral" />
-                      <span>Voice order entry</span>
-                    </li>
-                  </ul>
-                  <Button className="mt-8 w-full bg-custom-coral hover:bg-custom-orange text-white">
-                    <Translate text="common.getStarted">Start Free Trial</Translate>
-                  </Button>
+                  <CardDescription className="text-base">
+                    <p className="text-muted-foreground">
+                      <Translate text="home.features.invoice.desc">
+                        Automatically validate invoices against tax regulations. Highlights errors and suggests
+                        auto-fixes for country-specific tax rules.
+                      </Translate>
+                    </p>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-custom-coral flex items-center justify-center text-white mb-4">
+                    <CheckCircle className="h-6 w-6" />
+                  </div>
+                  <CardTitle>
+                    <h3 className="mb-2 text-xl font-semibold">
+                      <Translate text="home.features.analytics">Analytics Dashboard</Translate>
+                    </h3>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    <p className="text-muted-foreground">
+                      <Translate text="home.features.analytics.desc">
+                        Track sales, overdue payments, and tax filing deadlines. Get clear overviews of monthly sales
+                        volume, delayed shipments, and payments due.
+                      </Translate>
+                    </p>
+                  </CardDescription>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg hover:shadow-xl transition-shadow">
+                <CardHeader>
+                  <div className="w-12 h-12 rounded-lg bg-custom-orange flex items-center justify-center text-white mb-4">
+                    <CheckCircle className="h-6 w-6" />
+                  </div>
+                  <CardTitle>
+                    <h3 className="mb-2 text-xl font-semibold">
+                      <Translate text="home.features.reports">Tax-Ready Reports</Translate>
+                    </h3>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-base">
+                    <p className="text-muted-foreground">
+                      <Translate text="home.features.reports.desc">
+                        Generate monthly reports on sales, payments, and shipments. Export tax-ready PDF and CSV reports
+                        for accountants or direct filing.
+                      </Translate>
+                    </p>
+                  </CardDescription>
                 </CardContent>
               </Card>
             </div>
@@ -345,47 +214,94 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[
-                {
-                  quote:
-                    "PayPath has completely transformed how I handle invoices. The automated validation saves me hours every month.",
-                  author: "Alex Johnson",
-                  role: "Small Business Owner",
-                },
-                {
-                  quote:
-                    "I used to dread tax season. With PayPath, I'm always prepared and confident that my invoices are compliant.",
-                  author: "Sarah Miller",
-                  role: "Freelance Consultant",
-                },
-                {
-                  quote:
-                    "The analytics dashboard gives me a clear picture of my business finances. I can spot issues before they become problems.",
-                  author: "Michael Chen",
-                  role: "E-commerce Entrepreneur",
-                },
-              ].map((testimonial, index) => (
-                <Card key={index} className="border-none shadow-lg">
-                  <CardHeader>
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-custom-coral text-custom-coral" />
-                      ))}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600 mb-4">"{testimonial.quote}"</p>
-                    <div className="flex items-center gap-2">
-                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
-                      <div>
-                        <p className="font-medium">{testimonial.author}</p>
-                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+
+            <div className="grid gap-6 md:grid-cols-3">
+              <Card className="border-none shadow-lg">
+                <CardHeader>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-custom-coral text-custom-coral" />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col gap-4">
+                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+                    <blockquote className="mb-4">
+                      <p className="text-lg font-medium">
+                        <Translate text="home.testimonials.alex">
+                          "PayPath has completely transformed how I handle invoices. The automated validation saves me
+                          hours every month."
+                        </Translate>
+                      </p>
+                    </blockquote>
+                    <footer>
+                      <div className="font-semibold">Alex Johnson</div>
+                      <div className="text-sm text-muted-foreground">
+                        <Translate text="home.testimonials.alex.title">Small Business Owner</Translate>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </footer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg">
+                <CardHeader>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-custom-coral text-custom-coral" />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col gap-4">
+                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-custom-brightPurple to-custom-coral"></div>
+                    <blockquote className="mb-4">
+                      <p className="text-lg font-medium">
+                        <Translate text="home.testimonials.sarah">
+                          "I used to dread tax season. With PayPath, I'm always prepared and confident that my invoices
+                          are compliant."
+                        </Translate>
+                      </p>
+                    </blockquote>
+                    <footer>
+                      <div className="font-semibold">Sarah Miller</div>
+                      <div className="text-sm text-muted-foreground">
+                        <Translate text="home.testimonials.sarah.title">Freelance Consultant</Translate>
+                      </div>
+                    </footer>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-none shadow-lg">
+                <CardHeader>
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-custom-coral text-custom-coral" />
+                    ))}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col gap-4">
+                    <div className="h-16 w-16 rounded-full bg-gradient-to-br from-custom-coral to-custom-orange"></div>
+                    <blockquote className="mb-4">
+                      <p className="text-lg font-medium">
+                        <Translate text="home.testimonials.michael">
+                          "The analytics dashboard gives me a clear picture of my business finances. I can spot issues
+                          before they become problems."
+                        </Translate>
+                      </p>
+                    </blockquote>
+                    <footer>
+                      <div className="font-semibold">Michael Chen</div>
+                      <div className="text-sm text-muted-foreground">
+                        <Translate text="home.testimonials.michael.title">E-commerce Entrepreneur</Translate>
+                      </div>
+                    </footer>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -445,7 +361,7 @@ export default function HomePage() {
                     <Translate text="common.signup">Sign Up Now</Translate>
                   </Link>
                 </Button>
-                <Button variant="outline" className="border-white text-white hover:bg-white/20">
+                <Button className="bg-custom-orange text-black hover:bg-custom-orange/90 border-none">
                   <Link href="/help/contact">
                     <Translate text="common.contact">Contact Sales</Translate>
                   </Link>
@@ -459,36 +375,26 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t bg-white py-12">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+                <Image
+                  src="/images/paypath-logo.png"
+                  alt="PayPath Logo"
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 object-contain"
+                />
                 <span className="text-xl font-bold">PayPath</span>
               </div>
-              <p className="text-sm text-gray-500">Simplifying tax compliance for small businesses.</p>
+              <p className="text-sm text-gray-500">
+                <Translate text="footer.tagline">Simplifying tax compliance for small businesses.</Translate>
+              </p>
             </div>
             <div>
-              <h3 className="font-medium mb-4">Product</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Pricing
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Tutorials
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-medium mb-4">Company</h3>
+              <div className="font-medium mb-4">
+                <Translate text="footer.product">Product</Translate>
+              </div>
               <ul className="space-y-2 text-sm">
                 <li>
                   <Link href="/about" className="text-gray-500 hover:text-custom-purple">
@@ -496,23 +402,37 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/help/contact" className="text-gray-500 hover:text-custom-purple">
-                    <Translate text="common.contact">Contact</Translate>
+                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
+                    <Translate text="footer.features">Features</Translate>
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-medium mb-4">Legal</h3>
+              <div className="font-medium mb-4">
+                <Translate text="footer.support">Support</Translate>
+              </div>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Privacy
+                  <Link href="/help/contact" className="text-gray-500 hover:text-custom-purple">
+                    <Translate text="common.contact">Contact</Translate>
                   </Link>
                 </li>
                 <li>
+                  <Link href="/help/faq" className="text-gray-500 hover:text-custom-purple">
+                    <Translate text="common.faq">FAQ</Translate>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div className="font-medium mb-4">
+                <Translate text="footer.legal">Legal</Translate>
+              </div>
+              <ul className="space-y-2 text-sm">
+                <li>
                   <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                    Licenses
+                    <Translate text="footer.privacy">Privacy</Translate>
                   </Link>
                 </li>
               </ul>
@@ -524,7 +444,7 @@ export default function HomePage() {
           <div className="mt-12 border-t pt-6 flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-gray-500">&copy; {new Date().getFullYear()} PayPath. All rights reserved.</p>
             <div className="flex space-x-4 mt-4 md:mt-0">
-              <Link href="#" className="text-gray-500 hover:text-custom-purple">
+              <Link href="https://twitter.com" className="text-gray-500 hover:text-custom-purple">
                 <span className="sr-only">Twitter</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -541,7 +461,7 @@ export default function HomePage() {
                   <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
                 </svg>
               </Link>
-              <Link href="#" className="text-gray-500 hover:text-custom-purple">
+              <Link href="https://www.instagram.com" className="text-gray-500 hover:text-custom-purple">
                 <span className="sr-only">Instagram</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -560,7 +480,7 @@ export default function HomePage() {
                   <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
                 </svg>
               </Link>
-              <Link href="#" className="text-gray-500 hover:text-custom-purple">
+              <Link href="https://github.com/" className="text-gray-500 hover:text-custom-purple">
                 <span className="sr-only">GitHub</span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -576,25 +496,6 @@ export default function HomePage() {
                 >
                   <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
                   <path d="M9 18c-4.51 2-5-2-7-2"></path>
-                </svg>
-              </Link>
-              <Link href="#" className="text-gray-500 hover:text-custom-purple">
-                <span className="sr-only">LinkedIn</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="h-5 w-5"
-                >
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                  <rect width="4" height="12" x="2" y="9"></rect>
-                  <circle cx="4" cy="4" r="2"></circle>
                 </svg>
               </Link>
             </div>

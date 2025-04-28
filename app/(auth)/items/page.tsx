@@ -16,19 +16,39 @@ export default function ItemsPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      // Load items for the current user
-      const userItems = getItemsBySellerId(user.id)
-      setItems(userItems)
-    }
-    setIsLoading(false)
-  }, [user])
+    const fetchItems = async () => {
+      if (user) {
+        try {
+          setIsLoading(true)
+          // Load items for the current user
+          const userItems = await getItemsBySellerId(user.id)
 
-  const handleDeleteItem = (itemId: string) => {
+          // Ensure we have an array
+          setItems(Array.isArray(userItems) ? userItems : [])
+        } catch (error) {
+          console.error("Error fetching items:", error)
+          toast({
+            title: "Error",
+            description: "Failed to load items. Please try again later.",
+            variant: "destructive",
+          })
+          setItems([])
+        } finally {
+          setIsLoading(false)
+        }
+      } else {
+        setIsLoading(false)
+      }
+    }
+
+    fetchItems()
+  }, [user, toast])
+
+  const handleDeleteItem = async (itemId: string) => {
     if (confirm("Are you sure you want to delete this item?")) {
       try {
         // Delete item
-        deleteItem(itemId)
+        await deleteItem(itemId)
 
         // Update items list
         setItems(items.filter((item) => item.id !== itemId))
@@ -40,6 +60,7 @@ export default function ItemsPage() {
           variant: "default",
         })
       } catch (error) {
+        console.error("Error deleting item:", error)
         toast({
           title: "Error",
           description: "Failed to delete item",

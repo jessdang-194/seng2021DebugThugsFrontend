@@ -1,49 +1,133 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/hooks/use-toast"
 import { createInvoiceFromOrder, getInvoiceByOrderId, saveInvoice } from "@/models/invoice"
 import { getOrderById, updateOrderStatus } from "@/models/order"
-import { ArrowLeft, CheckCircle, CreditCard, Printer } from "lucide-react"
+import { ArrowLeft, CheckCircle, CreditCard, Copy, FileText } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
 
 export default function OrderDetailPage({ params }: { params: { id: string } }) {
-  const { user } = useToast()
   const { toast } = useToast()
   const router = useRouter()
   const [order, setOrder] = useState<any>(null)
   const [invoice, setInvoice] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isProcessing, setIsProcessing] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
+  const [isXmlDialogOpen, setIsXmlDialogOpen] = useState(false)
+
+  // Function to convert order to XML format
+  const getOrderXml = () => {
+    if (!order) return ""
+
+    // Create items XML
+    const itemsXml =
+      order.items && Array.isArray(order.items)
+        ? order.items
+            .map(
+              (item: any) =>
+                `    <item>
+      <name>${item.name}</name>
+      <quantity>${item.quantity}</quantity>
+      <pricePerUnit>${item.pricePerUnit.toFixed(2)}</pricePerUnit>
+      <total>${(item.quantity * item.pricePerUnit).toFixed(2)}</total>
+    </item>`,
+            )
+            .join("\n")
+        : ""
+
+    // Create full XML
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<order>
+  <id>${order.id}</id>
+  <createdAt>${new Date(order.createdAt).toISOString()}</createdAt>
+  <status>${order.status}</status>
+  <buyerUsername>${order.buyerUsername}</buyerUsername>
+  <sellerUsername>${order.sellerUsername}</sellerUsername>
+  <shippingAddress>${order.shippingAddress}</shippingAddress>
+  <items>
+${itemsXml}
+  </items>
+  <subtotal>${order.subtotal.toFixed(2)}</subtotal>
+  <gst>${order.gst.toFixed(2)}</gst>
+  <total>${order.total.toFixed(2)}</total>
+</order>`
+  }
+
+  // Function to copy XML to clipboard
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(getOrderXml())
+      .then(() => {
+        setIsCopied(true)
+        setTimeout(() => setIsCopied(false), 2000)
+        toast({
+          title: "Copied to clipboard",
+          description: "The XML has been copied to your clipboard.",
+          variant: "default",
+        })
+      })
+      .catch((error) => {
+        toast({
+          title: "Copy failed",
+          description: "Failed to copy XML to clipboard.",
+          variant: "destructive",
+        })
+      })
+  }
 
   useEffect(() => {
-    // Load order data
-    const orderData = getOrderById(params.id)
+    const fetchOrderData = async () => {
+      try {
+        setIsLoading(true)
+        // Load order data
+        const orderData = await getOrderById(params.id)
 
-    if (!orderData) {
-      toast({
-        title: "Error",
-        description: "Order not found",
-        variant: "destructive",
-      })
-      router.push("/incoming-orders")
-      return
+        if (!orderData) {
+          toast({
+            title: "Error",
+            description: "Order not found",
+            variant: "destructive",
+          })
+          router.push("/incoming-orders")
+          return
+        }
+
+        setOrder(orderData)
+
+        // Check if invoice exists
+        const invoiceData = await getInvoiceByOrderId(params.id)
+        if (invoiceData) {
+          setInvoice(invoiceData)
+        }
+      } catch (error) {
+        console.error("Error fetching order data:", error)
+        toast({
+          title: "Error",
+          description: "Failed to load order details. Please try again later.",
+          variant: "destructive",
+        })
+        router.push("/incoming-orders")
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    setOrder(orderData)
-
-    // Check if invoice exists
-    const invoiceData = getInvoiceByOrderId(params.id)
-    if (invoiceData) {
-      setInvoice(invoiceData)
-    }
-
-    setIsLoading(false)
+    fetchOrderData()
   }, [params.id, router, toast])
 
   const handleApprovePayment = async () => {
@@ -54,19 +138,19 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     try {
       // Create invoice if it doesn't exist
       if (!invoice) {
-        const newInvoice = createInvoiceFromOrder(
+        const newInvoice = await createInvoiceFromOrder(
           order,
           order.buyerUsername,
           "buyer@example.com", // In a real app, you'd have the buyer's email
         )
 
         // Save invoice
-        saveInvoice(newInvoice)
+        await saveInvoice(newInvoice)
         setInvoice(newInvoice)
       }
 
       // Update order status
-      updateOrderStatus(order.id, "pending")
+      await updateOrderStatus(order.id, "pending")
 
       // Update local state
       setOrder({ ...order, status: "pending" })
@@ -95,7 +179,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
     try {
       // Update order status
-      updateOrderStatus(order.id, "completed")
+      await updateOrderStatus(order.id, "completed")
 
       // Update local state
       setOrder({ ...order, status: "completed" })
@@ -117,13 +201,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     }
   }
 
-  const handlePrintInvoice = () => {
-    toast({
-      title: "Printing Invoice",
-      description: "The invoice is being prepared for printing.",
-      variant: "default",
-    })
-    // In a real app, this would trigger the print dialog
+  const handleViewXml = () => {
+    setIsXmlDialogOpen(true)
   }
 
   if (isLoading) {
@@ -163,7 +242,13 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Order Information</CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle>Order Information</CardTitle>
+              <Button variant="outline" size="sm" onClick={handleViewXml}>
+                <FileText className="h-3.5 w-3.5 mr-1" />
+                XML
+              </Button>
+            </div>
             <CardDescription>Details about this order</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -179,11 +264,11 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Status</p>
-              <p className="font-medium">
+              <div className="font-medium">
                 {order.status === "unpaid" && <Badge variant="orange">Unpaid</Badge>}
                 {order.status === "pending" && <Badge variant="purple">Pending</Badge>}
                 {order.status === "completed" && <Badge variant="brightPurple">Completed</Badge>}
-              </p>
+              </div>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Buyer</p>
@@ -223,13 +308,6 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 {isProcessing ? "Processing..." : "Complete Order"}
               </Button>
             )}
-
-            {invoice && (
-              <Button variant="outline" className="w-full" onClick={handlePrintInvoice}>
-                <Printer className="mr-2 h-4 w-4" />
-                Print Invoice
-              </Button>
-            )}
           </CardContent>
         </Card>
       </div>
@@ -250,14 +328,22 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
               </TableRow>
             </TableHeader>
             <TableBody>
-              {order.items.map((item: any, index: number) => (
-                <TableRow key={index}>
-                  <TableCell className="font-medium">{item.name}</TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>${item.pricePerUnit.toFixed(2)}</TableCell>
-                  <TableCell>${(item.quantity * item.pricePerUnit).toFixed(2)}</TableCell>
+              {order.items && Array.isArray(order.items) ? (
+                order.items.map((item: any, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium">{item.name}</TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>${item.pricePerUnit.toFixed(2)}</TableCell>
+                    <TableCell>${(item.quantity * item.pricePerUnit).toFixed(2)}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    No items found
+                  </TableCell>
                 </TableRow>
-              ))}
+              )}
               <TableRow>
                 <TableCell colSpan={3} className="text-right font-medium">
                   Subtotal:
@@ -281,40 +367,24 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         </CardContent>
       </Card>
 
-      {invoice && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Invoice</CardTitle>
-            <CardDescription>Invoice details for this order</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Invoice ID</p>
-                  <p className="font-medium">{invoice.id}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Date</p>
-                  <p className="font-medium">{new Date(invoice.createdAt).toLocaleDateString()}</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Bill To</p>
-                <p className="font-medium">{invoice.billTo.name}</p>
-                <p className="text-sm">{invoice.billTo.address}</p>
-                <p className="text-sm">{invoice.billTo.email}</p>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full" onClick={handlePrintInvoice}>
-              <Printer className="mr-2 h-4 w-4" />
-              Print Invoice
+      {/* XML Dialog */}
+      <Dialog open={isXmlDialogOpen} onOpenChange={setIsXmlDialogOpen}>
+        <DialogContent className="sm:max-w-[700px]">
+          <DialogHeader>
+            <DialogTitle>Order XML</DialogTitle>
+            <DialogDescription>XML representation of the order data</DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 max-h-[400px] overflow-auto">
+            <pre className="bg-gray-100 p-4 rounded-md text-sm whitespace-pre-wrap">{getOrderXml()}</pre>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={copyToClipboard}>
+              <Copy className="h-4 w-4 mr-2" />
+              {isCopied ? "Copied!" : "Copy to Clipboard"}
             </Button>
-          </CardFooter>
-        </Card>
-      )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

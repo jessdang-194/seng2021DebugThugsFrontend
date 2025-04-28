@@ -5,7 +5,8 @@ import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { EyeIcon, EyeOffIcon, GithubIcon, MailIcon } from "lucide-react"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+import Image from "next/image"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,7 +14,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/lib/auth-context"
 import { useToast } from "@/hooks/use-toast"
-import { LanguageSelector } from "@/components/language-selector"
 import { Translate } from "@/components/translate"
 
 export default function LoginPage() {
@@ -65,18 +65,27 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <header className="flex h-14 items-center px-4 lg:px-6 border-b">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+            <Image
+              src="/images/paypath-logo.png"
+              alt="PayPath Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+            />
             <span className="text-lg font-semibold tracking-tight">PayPath</span>
           </Link>
-          <div className="ml-auto flex items-center gap-2">
-            <LanguageSelector />
-          </div>
         </header>
 
         <Card className="border-none shadow-xl">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-2">
-              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-custom-purple to-custom-brightPurple"></div>
+              <Image
+                src="/images/paypath-logo.png"
+                alt="PayPath Logo"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
             </div>
             <CardTitle className="text-2xl font-bold text-center">
               <Translate text="common.login" />
@@ -159,34 +168,6 @@ export default function LoginPage() {
               >
                 {isLoading ? <Translate text="auth.signing_in" /> : <Translate text="common.login" />}
               </Button>
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground">
-                    <Translate text="auth.or_continue_with" />
-                  </span>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <Button
-                  variant="outline"
-                  type="button"
-                  className="border-custom-lavender/50 hover:bg-custom-lavender/10 hover:text-custom-purple"
-                >
-                  <GithubIcon className="mr-2 h-4 w-4" />
-                  Github
-                </Button>
-                <Button
-                  variant="outline"
-                  type="button"
-                  className="border-custom-lavender/50 hover:bg-custom-lavender/10 hover:text-custom-purple"
-                >
-                  <MailIcon className="mr-2 h-4 w-4" />
-                  Google
-                </Button>
-              </div>
               <div className="mt-4 text-center text-sm">
                 <Translate text="auth.no_account" />{" "}
                 <Link

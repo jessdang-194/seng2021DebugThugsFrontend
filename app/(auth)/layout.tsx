@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Image from "next/image"
 
 import { SidebarNav } from "@/app/(auth)/sidebar-nav"
 import { Button } from "@/components/ui/button"
@@ -10,7 +11,6 @@ import { LogOut, Menu, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { LanguageSelector } from "@/components/language-selector"
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -50,11 +50,16 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           <span className="sr-only">Toggle Menu</span>
         </Button>
         <Link href="/dashboard" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-custom-blue to-custom-brightBlue"></div>
+          <Image
+            src="/images/paypath-logo.png"
+            alt="PayPath Logo"
+            width={48}
+            height={48}
+            className="h-12 w-12 object-contain"
+          />
           <span className="text-lg font-semibold tracking-tight">PayPath</span>
         </Link>
         <div className="ml-auto flex items-center gap-2">
-          <LanguageSelector />
           {user && (
             <>
               <span className="text-sm text-muted-foreground hidden md:inline-block">

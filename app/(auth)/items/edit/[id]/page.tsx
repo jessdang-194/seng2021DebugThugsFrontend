@@ -30,38 +30,59 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
   })
 
   useEffect(() => {
-    // Load item data
-    const item = getItemById(params.id)
+    const fetchItem = async () => {
+      try {
+        setIsLoadingItem(true)
+        // Load item data
+        const item = await getItemById(params.id)
 
-    if (!item) {
-      toast({
-        title: "Error",
-        description: "Item not found",
-        variant: "destructive",
-      })
-      router.push("/items")
-      return
+        if (!item) {
+          toast({
+            title: "Error",
+            description: "Item not found",
+            variant: "destructive",
+          })
+          router.push("/items")
+          return
+        }
+
+        // Check if user is the seller
+        if (user && item.sellerId !== user.id) {
+          console.log("User ID:", user.id)
+          console.log("Item seller ID:", item.sellerId)
+          toast({
+            title: "Unauthorized",
+            description: "You don't have permission to edit this item",
+            variant: "destructive",
+          })
+          router.push("/items")
+          return
+        }
+
+        // Set form data
+        setFormData({
+          name: item.name,
+          description: item.description,
+          estimatedPrice: item.estimatedPrice.toString(),
+        })
+      } catch (error) {
+        console.error("Error fetching item:", error)
+        toast({
+          title: "Error",
+          description: "Failed to load item details",
+          variant: "destructive",
+        })
+        router.push("/items")
+      } finally {
+        setIsLoadingItem(false)
+      }
     }
 
-    // Check if user is the seller
-    if (user && item.sellerId !== user.id) {
-      toast({
-        title: "Unauthorized",
-        description: "You don't have permission to edit this item",
-        variant: "destructive",
-      })
-      router.push("/items")
-      return
+    if (user) {
+      fetchItem()
+    } else {
+      setIsLoadingItem(false)
     }
-
-    // Set form data
-    setFormData({
-      name: item.name,
-      description: item.description,
-      estimatedPrice: item.estimatedPrice.toString(),
-    })
-
-    setIsLoadingItem(false)
   }, [params.id, router, toast, user])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -69,7 +90,7 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!user) {
@@ -85,7 +106,7 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
 
     try {
       // Get existing item
-      const existingItem = getItemById(params.id)
+      const existingItem = await getItemById(params.id)
 
       if (!existingItem) {
         throw new Error("Item not found")
@@ -106,7 +127,7 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
       }
 
       // Save updated item
-      saveItem(updatedItem)
+      await saveItem(updatedItem)
 
       // Show success message
       toast({
@@ -199,12 +220,15 @@ export default function EditItemPage({ params }: { params: { id: string } }) {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => router.push("/items")}>
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-custom-teal hover:bg-custom-green text-white" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Changes"}
-            </Button>
+            <div className="flex justify-between w-full">
+              <Button type="button" variant="outline" onClick={() => router.push("/items")}>
+                Cancel
+              </Button>
+
+              <Button type="submit" variant="secondary" disabled={isLoading}>
+                {isLoading ? "Updating..." : "Update Item"}
+              </Button>
+            </div>
           </CardFooter>
         </form>
       </Card>

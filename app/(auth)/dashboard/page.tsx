@@ -10,9 +10,10 @@ import {
   getOrdersBySellerId,
   getUnpaidOrdersBySellerId,
 } from "@/models/order"
-import { Archive, BarChart3, CheckSquare, CreditCard, Package, ShoppingBag, ShoppingCart } from "lucide-react"
+import { CheckSquare, CreditCard, Package, ShoppingBag, ShoppingCart, CheckCircle, Clock, XCircle } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Badge } from "@/components/ui/badge"
 
 export default function DashboardPage() {
   const { user } = useAuth()
@@ -24,24 +25,112 @@ export default function DashboardPage() {
     completedOrders: 0,
   })
 
-  useEffect(() => {
-    if (user) {
-      // Get stats
-      const myItems = getItemsBySellerId(user.id).length
-      const outgoingOrders = getOrdersByBuyerId(user.id).length
-      const incomingOrders = getOrdersBySellerId(user.id).length
-      const pendingPayments = getUnpaidOrdersBySellerId(user.id).length
-      const completedOrders = getCompletedOrdersByBuyerId(user.id).length
+  const [recentOrders, setRecentOrders] = useState<
+    Array<{
+      id: string
+      status: string
+      type: "incoming" | "outgoing"
+    }>
+  >([])
 
-      setStats({
-        myItems,
-        outgoingOrders,
-        incomingOrders,
-        pendingPayments,
-        completedOrders,
-      })
+  useEffect(() => {
+    // Create an async function inside useEffect
+    const fetchData = async () => {
+      if (user) {
+        try {
+          // Get stats - await all async calls
+          const myItems = (await getItemsBySellerId(user.id)).length
+          const outgoingOrders = (await getOrdersByBuyerId(user.id)).length
+          const incomingOrders = (await getOrdersBySellerId(user.id)).length
+          const pendingPayments = (await getUnpaidOrdersBySellerId(user.id)).length
+          const completedOrders = (await getCompletedOrdersByBuyerId(user.id)).length
+
+          setStats({
+            myItems,
+            outgoingOrders,
+            incomingOrders,
+            pendingPayments,
+            completedOrders,
+          })
+
+          // Get recent orders (both incoming and outgoing)
+          const outgoingOrdersList = (await getOrdersByBuyerId(user.id)).map((order) => ({
+            id: order.id,
+            status: order.status,
+            type: "outgoing" as const,
+          }))
+
+          const incomingOrdersList = (await getOrdersBySellerId(user.id)).map((order) => ({
+            id: order.id,
+            status: order.status,
+            type: "incoming" as const,
+          }))
+
+          // Combine and sort by most recent (assuming IDs are sequential)
+          const allOrders = [...outgoingOrdersList, ...incomingOrdersList]
+            .sort((a, b) => b.id.localeCompare(a.id))
+            .slice(0, 3) // Get only the 3 most recent
+
+          setRecentOrders(allOrders)
+        } catch (error) {
+          console.error("Error fetching dashboard data:", error)
+        }
+      }
     }
+
+    // Call the async function
+    fetchData()
   }, [user])
+
+  // Get status badge color and icon
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case "unpaid":
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Unpaid
+          </Badge>
+        )
+      case "approved":
+        return (
+          <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            Approved
+          </Badge>
+        )
+      case "pending":
+        return (
+          <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">
+            <Clock className="h-3 w-3 mr-1" />
+            Pending
+          </Badge>
+        )
+      case "rejected":
+        return (
+          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+            <XCircle className="h-3 w-3 mr-1" />
+            Rejected
+          </Badge>
+        )
+      case "paid":
+        return (
+          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">
+            <CreditCard className="h-3 w-3 mr-1" />
+            Paid
+          </Badge>
+        )
+      case "completed":
+        return (
+          <Badge className="bg-purple-100 text-purple-800 hover:bg-purple-100">
+            <CheckSquare className="h-3 w-3 mr-1" />
+            Completed
+          </Badge>
+        )
+      default:
+        return <Badge variant="outline">Unknown</Badge>
+    }
+  }
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-custom-skyBlue/30 to-custom-lavenderBlush/30 min-h-screen rounded-lg">
@@ -122,15 +211,15 @@ export default function DashboardPage() {
             )}
             <div className="grid grid-cols-2 gap-2 mt-2">
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/incoming-orders/processing">
-                  <CheckSquare className="mr-2 h-4 w-4" />
-                  Processing Orders
+                <Link href="/incoming-orders">
+                  <Package className="mr-2 h-4 w-4" />
+                  Incoming Orders
                 </Link>
               </Button>
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/outgoing-orders/past">
-                  <Archive className="mr-2 h-4 w-4" />
-                  Past Orders
+                <Link href="/outgoing-orders">
+                  <ShoppingCart className="mr-2 h-4 w-4" />
+                  Outgoing Orders
                 </Link>
               </Button>
             </div>
@@ -144,24 +233,27 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {stats.completedOrders > 0 ? (
-                <div className="flex items-center justify-between border-b pb-2">
-                  <div>
-                    <p className="font-medium">Completed Orders</p>
-                    <p className="text-sm text-muted-foreground">You have {stats.completedOrders} completed orders</p>
+              {recentOrders.length > 0 ? (
+                recentOrders.map((order) => (
+                  <div key={order.id} className="flex items-center justify-between border-b pb-2 last:border-0">
+                    <div>
+                      <Link
+                        href={
+                          order.type === "incoming"
+                            ? `/incoming-orders/${order.id}`
+                            : `/outgoing-orders/details/${order.id}`
+                        }
+                        className="font-medium text-custom-purple hover:underline"
+                      >
+                        {order.id}
+                      </Link>
+                      <p className="text-sm text-muted-foreground">
+                        {order.type === "incoming" ? "Incoming" : "Outgoing"} Order
+                      </p>
+                    </div>
+                    <div>{getStatusBadge(order.status)}</div>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="hover:text-custom-purple hover:border-custom-purple"
-                    asChild
-                  >
-                    <Link href="/outgoing-orders/past">
-                      <BarChart3 className="mr-2 h-4 w-4" />
-                      View
-                    </Link>
-                  </Button>
-                </div>
+                ))
               ) : (
                 <div className="text-center py-8">
                   <p className="text-muted-foreground">No recent activity to display.</p>

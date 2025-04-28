@@ -14,7 +14,7 @@ import {
   updateOrderStatus,
 } from "@/models/order"
 import { createInvoiceFromOrder, saveInvoice } from "@/models/invoice"
-import { CheckCircle, CreditCard, Eye, Search } from "lucide-react"
+import { CheckCircle, CreditCard, Search } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -32,18 +32,38 @@ export default function IncomingOrdersPage() {
   const [processingPaymentOrderId, setProcessingPaymentOrderId] = useState<string | null>(null)
 
   useEffect(() => {
-    if (user) {
-      // Load orders from localStorage
-      const sellerOrders = getOrdersBySellerId(user.id)
-      const sellerPendingOrders = getPendingOrdersBySellerId(user.id)
-      const sellerUnpaidOrders = getUnpaidOrdersBySellerId(user.id)
+    const fetchOrders = async () => {
+      if (user) {
+        try {
+          setIsLoading(true)
+          // Load orders from Redis
+          const sellerOrders = await getOrdersBySellerId(user.id)
+          const sellerPendingOrders = await getPendingOrdersBySellerId(user.id)
+          const sellerUnpaidOrders = await getUnpaidOrdersBySellerId(user.id)
 
-      setAllOrders(sellerOrders)
-      setPendingOrders(sellerPendingOrders)
-      setUnpaidOrders(sellerUnpaidOrders)
-      setIsLoading(false)
+          // Ensure we have arrays
+          setAllOrders(Array.isArray(sellerOrders) ? sellerOrders : [])
+          setPendingOrders(Array.isArray(sellerPendingOrders) ? sellerPendingOrders : [])
+          setUnpaidOrders(Array.isArray(sellerUnpaidOrders) ? sellerUnpaidOrders : [])
+        } catch (error) {
+          console.error("Error fetching orders:", error)
+          toast({
+            title: "Error",
+            description: "Failed to load orders. Please try again later.",
+            variant: "destructive",
+          })
+          // Initialize with empty arrays on error
+          setAllOrders([])
+          setPendingOrders([])
+          setUnpaidOrders([])
+        } finally {
+          setIsLoading(false)
+        }
+      }
     }
-  }, [user])
+
+    fetchOrders()
+  }, [user, toast])
 
   // Filter orders based on search term
   const filteredOrders = allOrders.filter(
@@ -101,15 +121,15 @@ export default function IncomingOrdersPage() {
 
     try {
       // Update order status
-      updateOrderStatus(orderId, "completed")
+      await updateOrderStatus(orderId, "completed")
 
       // Update local state
       setPendingOrders(pendingOrders.filter((o) => o.id !== orderId))
 
       // Refresh all orders
       if (user) {
-        const sellerOrders = getOrdersBySellerId(user.id)
-        setAllOrders(sellerOrders)
+        const sellerOrders = await getOrdersBySellerId(user.id)
+        setAllOrders(Array.isArray(sellerOrders) ? sellerOrders : [])
       }
 
       // Show success message
@@ -141,23 +161,23 @@ export default function IncomingOrdersPage() {
       }
 
       // Create invoice
-      const invoice = createInvoiceFromOrder(order, `${user?.firstName} ${user?.lastName}`, user?.email || "")
+      const invoice = await createInvoiceFromOrder(order, `${user?.firstName} ${user?.lastName}`, user?.email || "")
 
       // Save invoice
-      saveInvoice(invoice)
+      await saveInvoice(invoice)
 
       // Update order status
-      updateOrderStatus(orderId, "pending")
+      await updateOrderStatus(orderId, "pending")
 
       // Update local state
       setUnpaidOrders(unpaidOrders.filter((o) => o.id !== orderId))
 
       // Refresh all orders and pending orders
       if (user) {
-        const sellerOrders = getOrdersBySellerId(user.id)
-        const sellerPendingOrders = getPendingOrdersBySellerId(user.id)
-        setAllOrders(sellerOrders)
-        setPendingOrders(sellerPendingOrders)
+        const sellerOrders = await getOrdersBySellerId(user.id)
+        const sellerPendingOrders = await getPendingOrdersBySellerId(user.id)
+        setAllOrders(Array.isArray(sellerOrders) ? sellerOrders : [])
+        setPendingOrders(Array.isArray(sellerPendingOrders) ? sellerPendingOrders : [])
       }
 
       // Show success message
@@ -223,30 +243,20 @@ export default function IncomingOrdersPage() {
                         <TableHead>Items</TableHead>
                         <TableHead>Total</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredOrders.map((order) => (
                         <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id}</TableCell>
+                          <TableCell className="font-medium">
+                            <Link href={`/incoming-orders/${order.id}`} className="text-custom-purple hover:underline">
+                              {order.id}
+                            </Link>
+                          </TableCell>
                           <TableCell>{order.buyerUsername}</TableCell>
                           <TableCell>{order.items.length}</TableCell>
                           <TableCell>${order.total.toFixed(2)}</TableCell>
                           <TableCell>{getStatusBadge(order.status)}</TableCell>
-                          <TableCell className="text-right">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="hover:text-custom-purple hover:border-custom-purple"
-                              asChild
-                            >
-                              <Link href={`/incoming-orders/${order.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Link>
-                            </Button>
-                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -295,34 +305,29 @@ export default function IncomingOrdersPage() {
                         <TableHead>Buyer</TableHead>
                         <TableHead>Items</TableHead>
                         <TableHead>Total</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredUnpaidOrders.map((order) => (
                         <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id}</TableCell>
+                          <TableCell className="font-medium">
+                            <Link href={`/incoming-orders/${order.id}`} className="text-custom-purple hover:underline">
+                              {order.id}
+                            </Link>
+                          </TableCell>
                           <TableCell>{order.buyerUsername}</TableCell>
                           <TableCell>{order.items.length}</TableCell>
                           <TableCell>${order.total.toFixed(2)}</TableCell>
                           <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button variant="outline" size="sm" asChild>
-                                <Link href={`/incoming-orders/${order.id}`}>
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View
-                                </Link>
-                              </Button>
-                              <Button
-                                className="bg-custom-purple hover:bg-custom-brightPurple text-white"
-                                size="sm"
-                                onClick={() => handleApprovePayment(order.id)}
-                                disabled={processingPaymentOrderId === order.id}
-                              >
-                                <CreditCard className="h-4 w-4 mr-2" />
-                                {processingPaymentOrderId === order.id ? "Processing..." : "Approve Payment"}
-                              </Button>
-                            </div>
+                            <Button
+                              className="bg-custom-purple hover:bg-custom-brightPurple text-white"
+                              size="sm"
+                              onClick={() => handleApprovePayment(order.id)}
+                              disabled={processingPaymentOrderId === order.id}
+                            >
+                              <CreditCard className="h-4 w-4 mr-2" />
+                              {processingPaymentOrderId === order.id ? "Processing..." : "Approve Payment"}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}
@@ -372,34 +377,29 @@ export default function IncomingOrdersPage() {
                         <TableHead>Buyer</TableHead>
                         <TableHead>Items</TableHead>
                         <TableHead>Total</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredPendingOrders.map((order) => (
                         <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id}</TableCell>
+                          <TableCell className="font-medium">
+                            <Link href={`/incoming-orders/${order.id}`} className="text-custom-purple hover:underline">
+                              {order.id}
+                            </Link>
+                          </TableCell>
                           <TableCell>{order.buyerUsername}</TableCell>
                           <TableCell>{order.items.length}</TableCell>
                           <TableCell>${order.total.toFixed(2)}</TableCell>
                           <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button variant="outline" size="sm" asChild>
-                                <Link href={`/incoming-orders/${order.id}`}>
-                                  <Eye className="h-4 w-4 mr-2" />
-                                  View
-                                </Link>
-                              </Button>
-                              <Button
-                                className="bg-custom-coral hover:bg-custom-orange text-white"
-                                size="sm"
-                                onClick={() => handleCompleteOrder(order.id)}
-                                disabled={processingOrderId === order.id}
-                              >
-                                <CheckCircle className="h-4 w-4 mr-2" />
-                                {processingOrderId === order.id ? "Processing..." : "Complete Order"}
-                              </Button>
-                            </div>
+                            <Button
+                              className="bg-custom-coral hover:bg-custom-orange text-white"
+                              size="sm"
+                              onClick={() => handleCompleteOrder(order.id)}
+                              disabled={processingOrderId === order.id}
+                            >
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              {processingOrderId === order.id ? "Processing..." : "Complete Order"}
+                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}

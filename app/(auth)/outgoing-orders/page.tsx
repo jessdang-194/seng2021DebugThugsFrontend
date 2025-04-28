@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/lib/auth-context"
 import { getCompletedOrdersByBuyerId, getOrdersByBuyerId } from "@/models/order"
-import { Eye, Plus, Search } from "lucide-react"
+import { Plus, Search } from "lucide-react"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
@@ -22,19 +22,36 @@ export default function OutgoingOrdersPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (user) {
-      // Load orders from localStorage
-      const userOrders = getOrdersByBuyerId(user.id)
-      const userCompletedOrders = getCompletedOrdersByBuyerId(user.id)
+    async function fetchOrders() {
+      if (user) {
+        try {
+          // Load orders from Redis
+          const userOrders = await getOrdersByBuyerId(user.id)
+          const userCompletedOrders = await getCompletedOrdersByBuyerId(user.id)
 
-      // Filter out completed orders from the main orders list
-      const activeOrders = userOrders.filter((order) => order.status !== "completed")
+          // Filter out completed orders from the main orders list
+          // Make sure userOrders is an array before filtering
+          const activeOrders = Array.isArray(userOrders)
+            ? userOrders.filter((order) => order.status !== "completed")
+            : []
 
-      setOrders(activeOrders)
-      setCompletedOrders(userCompletedOrders)
-      setIsLoading(false)
+          setOrders(activeOrders)
+          setCompletedOrders(Array.isArray(userCompletedOrders) ? userCompletedOrders : [])
+        } catch (error) {
+          console.error("Error fetching orders:", error)
+          toast({
+            title: "Error",
+            description: "Failed to load orders. Please try again later.",
+            variant: "destructive",
+          })
+        } finally {
+          setIsLoading(false)
+        }
+      }
     }
-  }, [user])
+
+    fetchOrders()
+  }, [user, toast])
 
   // Filter orders based on search term
   const filteredOrders = orders.filter(
@@ -133,30 +150,23 @@ export default function OutgoingOrdersPage() {
                         <TableHead>Items</TableHead>
                         <TableHead>Total</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredOrders.map((order) => (
                         <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id}</TableCell>
+                          <TableCell className="font-medium">
+                            <Link
+                              href={`/outgoing-orders/details/${order.id}`}
+                              className="text-custom-purple hover:underline"
+                            >
+                              {order.id}
+                            </Link>
+                          </TableCell>
                           <TableCell>{order.sellerUsername}</TableCell>
                           <TableCell>{order.items.length}</TableCell>
                           <TableCell>${order.total.toFixed(2)}</TableCell>
                           <TableCell>{getStatusBadge(order.status)}</TableCell>
-                          <TableCell className="text-right">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="hover:text-custom-purple hover:border-custom-purple"
-                              asChild
-                            >
-                              <Link href={`/outgoing-orders/${order.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Link>
-                            </Button>
-                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -211,25 +221,23 @@ export default function OutgoingOrdersPage() {
                         <TableHead>Date</TableHead>
                         <TableHead>Items</TableHead>
                         <TableHead>Total</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredCompletedOrders.map((order) => (
                         <TableRow key={order.id}>
-                          <TableCell className="font-medium">{order.id}</TableCell>
+                          <TableCell className="font-medium">
+                            <Link
+                              href={`/outgoing-orders/details/${order.id}`}
+                              className="text-custom-purple hover:underline"
+                            >
+                              {order.id}
+                            </Link>
+                          </TableCell>
                           <TableCell>{order.sellerUsername}</TableCell>
                           <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                           <TableCell>{order.items.length}</TableCell>
                           <TableCell>${order.total.toFixed(2)}</TableCell>
-                          <TableCell className="text-right">
-                            <Button variant="outline" size="sm" asChild>
-                              <Link href={`/outgoing-orders/${order.id}`}>
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Link>
-                            </Button>
-                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

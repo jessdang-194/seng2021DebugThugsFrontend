@@ -13,7 +13,7 @@ import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 
 export default function ProfilePage() {
-  const { user } = useAuth()
+  const { user, updateUserProfile } = useAuth()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -23,6 +23,10 @@ export default function ProfilePage() {
     lastName: user?.lastName || "",
     email: user?.email || "",
     billingAddress: user?.billingAddress || "",
+    companyName: user?.companyName || "",
+    abn: user?.abn || "",
+    accountNumber: user?.accountNumber || "",
+    bsb: user?.bsb || "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -30,20 +34,44 @@ export default function ProfilePage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
-    setTimeout(() => {
-      // In a real app, you would update the user profile here
-      toast({
-        title: "Profile Updated",
-        description: "Your profile information has been updated successfully.",
-        variant: "default",
+    try {
+      const result = await updateUserProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        billingAddress: formData.billingAddress,
+        companyName: formData.companyName,
+        abn: formData.abn,
+        accountNumber: formData.accountNumber,
+        bsb: formData.bsb,
       })
+
+      if (result.success) {
+        toast({
+          title: "Profile Updated",
+          description: "Your profile information has been updated successfully.",
+          variant: "default",
+        })
+      } else {
+        toast({
+          title: "Update Failed",
+          description: result.message,
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred.",
+        variant: "destructive",
+      })
+    } finally {
       setIsLoading(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -59,7 +87,7 @@ export default function ProfilePage() {
         <Card>
           <CardHeader>
             <CardTitle>Personal Information</CardTitle>
-            <CardDescription>Update your personal details and billing address</CardDescription>
+            <CardDescription>Update your personal details and business information</CardDescription>
           </CardHeader>
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
@@ -93,6 +121,49 @@ export default function ProfilePage() {
                   type="email"
                   value={formData.email}
                   onChange={handleChange}
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="companyName">Company Name</Label>
+                <Input
+                  id="companyName"
+                  name="companyName"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="abn">ABN (Australian Business Number)</Label>
+                <Input
+                  id="abn"
+                  name="abn"
+                  value={formData.abn}
+                  onChange={handleChange}
+                  placeholder="XX XXX XXX XXX"
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bsb">BSB</Label>
+                <Input
+                  id="bsb"
+                  name="bsb"
+                  value={formData.bsb}
+                  onChange={handleChange}
+                  placeholder="XXX-XXX"
+                  className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="accountNumber">Account Number</Label>
+                <Input
+                  id="accountNumber"
+                  name="accountNumber"
+                  value={formData.accountNumber}
+                  onChange={handleChange}
+                  placeholder="XXXXXXXX"
                   className="border-custom-lavender/50 focus:border-custom-purple focus:ring-custom-purple"
                 />
               </div>

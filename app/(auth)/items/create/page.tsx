@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/lib/auth-context"
-import { createItem, saveItem } from "@/models/item"
+import { createItem } from "@/models/item"
 import { ArrowLeft } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -33,7 +33,7 @@ export default function CreateItemPage() {
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!user) {
@@ -55,10 +55,7 @@ export default function CreateItemPage() {
       }
 
       // Create new item
-      const newItem = createItem(formData.name, formData.description, price, user.id, user.username)
-
-      // Save item to localStorage
-      saveItem(newItem)
+      const newItem = await createItem(formData.name, formData.description, price, user.id, user.username)
 
       // Show success message
       toast({
@@ -70,6 +67,7 @@ export default function CreateItemPage() {
       // Redirect to items page
       router.push("/items")
     } catch (error) {
+      console.error("Error creating item:", error)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to create item",
@@ -143,12 +141,15 @@ export default function CreateItemPage() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => router.push("/items")}>
-              Cancel
-            </Button>
-            <Button type="submit" className="bg-custom-teal hover:bg-custom-green text-white" disabled={isLoading}>
-              {isLoading ? "Creating..." : "Create Item"}
-            </Button>
+            <div className="flex justify-between w-full">
+              <Button type="button" variant="outline" onClick={() => router.push("/items")}>
+                Cancel
+              </Button>
+
+              <Button type="submit" variant="secondary" disabled={isLoading}>
+                {isLoading ? "Creating..." : "Submit"}
+              </Button>
+            </div>
           </CardFooter>
         </form>
       </Card>

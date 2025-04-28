@@ -1,3 +1,4 @@
+import { getInvoices, saveInvoices } from "../lib/redis"
 import type { Order } from "./order"
 
 export type Invoice = {
@@ -21,8 +22,8 @@ export type Invoice = {
 }
 
 // Helper function to create an invoice from an order
-export function createInvoiceFromOrder(order: Order, buyerName: string, buyerEmail: string): Invoice {
-  return {
+export async function createInvoiceFromOrder(order: Order, buyerName: string, buyerEmail: string): Promise<Invoice> {
+  const newInvoice = {
     id: `invoice_${Date.now()}`,
     orderId: order.id,
     billTo: {
@@ -41,19 +42,21 @@ export function createInvoiceFromOrder(order: Order, buyerName: string, buyerEma
     total: order.total,
     createdAt: new Date().toISOString(),
   }
+
+  await saveInvoice(newInvoice)
+  return newInvoice
 }
 
 // Helper function to get all invoices
-export function getAllInvoices(): Invoice[] {
-  const invoicesJson = localStorage.getItem("invoices") || "[]"
-  return JSON.parse(invoicesJson)
+export async function getAllInvoices(): Promise<Invoice[]> {
+  return await getInvoices()
 }
 
 // Helper function to get invoice by order ID with better error handling
-export function getInvoiceByOrderId(orderId: string): Invoice | undefined {
+export async function getInvoiceByOrderId(orderId: string): Promise<Invoice | undefined> {
   try {
-    const invoices = getAllInvoices()
-    return invoices.find((invoice) => invoice.orderId === orderId)
+    const invoices = await getInvoices()
+    return invoices.find((invoice: Invoice) => invoice.orderId === orderId)
   } catch (error) {
     console.error("Error retrieving invoice:", error)
     return undefined
@@ -61,10 +64,10 @@ export function getInvoiceByOrderId(orderId: string): Invoice | undefined {
 }
 
 // Helper function to save an invoice
-export function saveInvoice(invoice: Invoice): void {
+export async function saveInvoice(invoice: Invoice): Promise<void> {
   try {
-    const invoices = getAllInvoices()
-    const existingInvoiceIndex = invoices.findIndex((i) => i.id === invoice.id)
+    const invoices = await getInvoices()
+    const existingInvoiceIndex = invoices.findIndex((i: Invoice) => i.id === invoice.id)
 
     if (existingInvoiceIndex >= 0) {
       invoices[existingInvoiceIndex] = invoice
@@ -72,15 +75,7 @@ export function saveInvoice(invoice: Invoice): void {
       invoices.push(invoice)
     }
 
-    localStorage.setItem("invoices", JSON.stringify(invoices))
-
-    // Verify the invoice was saved correctly
-    const savedInvoices = JSON.parse(localStorage.getItem("invoices") || "[]")
-    const savedInvoice = savedInvoices.find((i: Invoice) => i.id === invoice.id)
-
-    if (!savedInvoice) {
-      console.error("Failed to save invoice:", invoice.id)
-    }
+    await saveInvoices(invoices)
   } catch (error) {
     console.error("Error saving invoice:", error)
   }
